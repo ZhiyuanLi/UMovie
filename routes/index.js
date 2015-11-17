@@ -6,16 +6,16 @@ router.get('/', function(req, res, next) {
 	res.render('homepage');
 });
 
-router.get('/references', function(req, res, next) {
-	res.render('references');
+router.get('/topRanked', function(req, res, next) {
+	res.render('topRanked');
 });
 
-router.get('/sample', function(req, res, next) {
-	res.render('sample', {results: null});
+router.get('/tagsMovie', function(req, res, next) {
+	res.render('tagsMovie', {results: null});
 });
-
-router.get('/yourwork', function(req, res, next) {
-	res.render('yourwork', {results: null});
-});
+////
+////router.get('/yourwork', function(req, res, next) {
+////	res.render('yourwork', {results: null});
+//});
 
 module.exports = router;

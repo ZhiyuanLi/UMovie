@@ -1,21 +1,24 @@
+/**
+ * Author: Kaushik Yasaswy
+ * Date: Saturday, 26-Sep-15 07:56:18 UTC
+ */
+
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var sample = require('./routes/sampleRoute');
+var yourwork = require('./routes/yourworkRoute');
 
 var app = express();
 
+console.log('CIS450/550 Homework3');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,7 +26,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+
+// if you get a request for the sampleResponse page, call the 'displayResponse' function present in the 'sampleRoute' route
+app.get('/sampleResponse', sample.displayResponse);
+// if you qet a request for the yourworkResponse page, call the 'displayResponse' function present in the 'yourworkRoute' route
+app.get('/yourworkResponse', yourwork.displayResponse);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -35,7 +43,6 @@ app.use(function(req, res, next) {
 // error handlers
 
 // development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -47,7 +54,6 @@ if (app.get('env') === 'development') {
 }
 
 // production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -55,6 +61,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

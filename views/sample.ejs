@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CIS 450/550 Homework3</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="/">CIS450/550</a>
+	    </div>
+	    <div>
+	      <ul class="nav navbar-nav">
+	        <li><a href="/">Home</a></li>
+	        <li class="active"><a href="/sample">Sample Work</a></li>
+	        <li><a href="/yourwork">Your Work</a></li> 
+	        <li><a href="/references">References</a></li> 
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+    <div class="heading">
+    	<% if (results == null) { %>
+    	   <form method="get" action="/sampleResponse">
+    	   		<p>This is a sample page to help you understand how the MongoDB module works and how you can display the results. The JSON
+    	   		that you get back can be processed either in the EJS file or in the route itself. Take a look at the code and understand
+    	   		this properly. You can also find helpful resources in the 'References' tab above.</p>
+    	   		<p>Clicking on the button below runs a modified version of the first query in the MongoDB part of this homework, i.e finds all the bars in
+    	   		Carnegie and displays the results.</p><br>
+			    <button type="submit" class="btn btn-warning btn-lg">See Results</button>
+			</form>		
+        <% } 
+           else { %>
+				<% for(var i=0; i<results.length; i++) { %>
+					<p><%= results[i] %></p>
+				<% } %>
+		<% } %>	
+    </div>
+  </body>
+</html>
