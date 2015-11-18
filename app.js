@@ -1,11 +1,3 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-	host : 'u-moive.cvgkmmzz4oct.us-east-1.rds.amazonaws.com',
-	user : 'awsuser',
-	password : 'ffffffff',
-	port : '3306',
-	database : 'U_Moive'
-});
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
@@ -14,28 +6,11 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var sample = require('./routes/sampleRoute');
 var yourwork = require('./routes/yourworkRoute');
+//var homepage = require('./routes/homepageRoute');
 
 var app = express();
 
-
 console.log('Project UMovie');
-
-connection.connect();
-
-var queryString = 'SELECT * FROM genre';
- 
-connection.query(queryString, function(err, rows, fields) {
-    if (err) throw err;
- 
-    for (var i in rows) {
-        console.log('Genre: ', rows[i].genre);
-    }
-});
- 
-connection.end();
-
-console.log('CIS450/550 Homework3');
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,6 +31,10 @@ app.get('/sampleResponse', sample.displayResponse);
 // if you qet a request for the yourworkResponse page, call the
 // 'displayResponse' function present in the 'yourworkRoute' route
 app.get('/yourworkResponse', yourwork.displayResponse);
+//if you qet a request for the homepageResponse page, call the
+//'displayResponse' function present in the 'homepageRoute' route
+//app.get('/homepageResponse', homepage.displayResponse);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
