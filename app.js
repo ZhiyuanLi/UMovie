@@ -14,7 +14,7 @@ var yourwork = require('./routes/yourworkRoute');
 
 var app = express();
 
-console.log('CIS450/550 Homework3');
+console.log('Project UMovie');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
