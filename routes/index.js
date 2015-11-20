@@ -10,6 +10,21 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
+/* get latest movie from mysql database */
+function showLatestMovie(req, res, next) {
+	var latestMovie = 'SELECT name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 5';
+	connection.query(latestMovie, function(err, rows, fields) {
+		if (err) {
+			throw err;	
+		} else {
+			res.render('homepage', {
+				latestMovies : rows
+			});
+			//connection.end();
+		}
+	});
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	showLatestMovie(req, res, next);
@@ -27,19 +42,3 @@ router.get('/tagsMovie', function(req, res, next) {
 
 module.exports = router;
 
-/* get latest movie from mysql database */
-function showLatestMovie(req, res, next) {
-	//connection.connect();
-	var latestMovie = 'SELECT name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 5';
-	connection.query(latestMovie, function(err, rows, fields) {
-		if (err) {
-			throw err;
-			//connection.end();
-		} else {
-			res.render('homepage', {
-				latestMovies : rows
-			});
-			//connection.end();
-		}
-	});
-}

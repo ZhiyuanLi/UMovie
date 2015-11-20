@@ -30,10 +30,13 @@
     	<% }
     		else { %>
     			<p>Welcome to the world of UMovie!</p>
-    			<p>Latest top 5 movie.</p>
+    			<p>Latest top 5 movie</p>
     			<% for (var i = 0; i< latestMovies.length; i++) { %>
     				<p><%= latestMovies[i].name %></p> 
-    				
+    				<p><%= latestMovies[i].abstraction %></p> 
+                    <p><%= latestMovies[i].date %></p> 
+                    <p><%= latestMovies[i].poster %></p> 
+                    <script type="text/javascript" src= "latestMovies[i].poster" alt= "Movie Poster"/></script>
     			<% } %>
     		<% } %>	
     </div>
