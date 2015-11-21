@@ -33,16 +33,16 @@
     			<p>Latest top 5 movie</p>
     			<% for (var i = 0; i< latestMovies.length; i++) { %>
     				<p><%= latestMovies[i].name %></p> 
-                    <form method="get" action="/homepage/:movie_id">
-                        <button type="submit" name = "movie_id" value = <%= latestMovies[i].movie_id %> class="btn btn-warning btn-lg">See Results</button>
+                    <form method="get" action="/movies">
+                        <button type="submit" name = "movie_id" value = <%= latestMovies[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
                     </form>
     				<p><%= latestMovies[i].abstraction %></p>
                     <p><%= latestMovies[i].rating %></p>  
                     <p><%= latestMovies[i].date %></p> 
-                    <p><%= latestMovies[i].poster %></p> 
+                    <img src="<%= latestMovies[i].poster %>" height = "342"/>
                 <% } %>
             <% } %>
-            <% if (search_results != null) { %>
+           <% if (search_results != null) { %>
                 <p>Search results:</p>
                 <% for (var i = 0; i< search_results.length; i++) { %>
                     <p><%= search_results[i].mname %></p> 
@@ -53,15 +53,9 @@
                     <p><%= search_results[i].abstraction %></p> 
                     <p><%= search_results[i].date %></p> 
                     <p><%= search_results[i].poster %></p> 
-                    <script type="text/javascript">
-                    function load()
-                    {
-                    document.getElementById('image').src = latestMovies[i].poster;
-                    }
-                    </script>
-                    <img src="nothing.jpg" id="image" name="image"/>
+                    <img src="<%= search_results[i].poster %>" height = "342"/>
                 <% } %>
-            <% } %> 
+            <% } %>
     </div>
   </body>
 </html>

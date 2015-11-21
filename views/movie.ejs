@@ -4,6 +4,10 @@
     <title>UMovie</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <form>
+                Search
+                <input type="text" name="search">
+                </form>
   </head>
   <body>
     <nav class="navbar navbar-inverse">
@@ -22,16 +26,29 @@
 	</nav>
     <div class="heading">
     	<% if (movieDetail == null) { %>
-    	   <form method="get" action="/movieRoute">
-    	   		<p>yeah</p><br>
-			    <button type="submit" name="movie_id" value= "2" class="btn btn-warning btn-lg">See Results</button>
-			</form>		
         <% } 
            else { %>
 				<% for(var i=0; i<movieDetail.length; i++) { %>
 					<p><%= movieDetail[i].name %></p>
 				<% } %>
 		<% } %>	
+		 <% if (search_results != null) { %>
+                <p>Search results:</p>
+                <% for (var i = 0; i< search_results.length; i++) { %>
+                    <form method="get" action="/movies">
+                        <button type="submit" name = "movie_id" value = <%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+                    </form>
+                    <p><%= search_results[i].mname %></p> 
+                    <p><%= search_results[i].rating %></p> 
+                    <p><%= search_results[i].pname %></p> 
+                    <p><%= search_results[i].i_job %></p> 
+                    <p><%= search_results[i].rating %></p> 
+                    <p><%= search_results[i].abstraction %></p> 
+                    <p><%= search_results[i].date %></p> 
+                    <p><%= search_results[i].poster %></p> 
+                    <img src="<%= search_results[i].poster %>" height = "342"/>
+                <% } %>
+            <% } %>
     </div>
   </body>
 </html>

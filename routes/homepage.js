@@ -43,31 +43,13 @@ function showSearchMovie(req, res, next) {
 	}
 }
 
-function doMovieQuery(req, res, next) {
-	console.log("1");
-	console.log(req.query.movie_id);
-	console.log("hehe");
-	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "' + req.query.movie_id + '"' ;
-	connection.query(movieQuery, function (err, movieDetail) {
-		if (!err) {
-			console.log("yes!!");
-			res.render('movie.ejs', {movieDetail: movieDetail});
-		} else
-			next(new Error(500));
-	});
-}
-
 
 /* GET home page. */
 
-router.get('/homepage', function(req, res, next) {
+router.get('/', function(req, res, next) {
 	showSearchMovie(req, res, next);
 });
 
-router.get('/homepage/:movie_id', function(req, res, next) {
-	console.log("kkk");
-	doMovieQuery(req, res, next);
-});
 
 router.get('/topRanked', function(req, res, next) {
 	res.render('topranked');
@@ -78,13 +60,6 @@ router.get('/tagsMovie', function(req, res, next) {
 		results : null
 	});
 });
-
-router.get('/moviepage', function(req, res, next) {
-	res.render('moviepage',{
-		results : null
-	});
-});
-
 
 
 module.exports = router;
