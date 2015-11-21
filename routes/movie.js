@@ -49,7 +49,8 @@ function generateResponse(req, res, next) {
 				res.render('movie', {
 					user : req.user,
 					search_results : rows,
-					movieDetail : null
+					movieDetail : null,
+					person : null
 					
 				});
 				// connection.end();
