@@ -29,16 +29,28 @@
         <% } 
            else { %>
 				<% for(var i=0; i<movieDetail.length; i++) { %>
-					<p><%= movieDetail[i].name %></p>
+                    <p><%= movieDetail[i].name %></p>
+                    <img src="<%= movieDetail[i].poster %>" height = "342"/>
+                    <p>Rating: <%= movieDetail[i].rating %></p>
+                    <p>Abstraction: <%= movieDetail[i].abstraction %></p>
 				<% } %>
 		<% } %>	
+                    <p> Crew: </p>
+        <% if (person == null) { %>
+        <% } 
+           else { %>
+                <% for(var i=0; i<person.length; i++) { %>
+                    <p> <%= person[i].job %>: <%= person[i].pname %></p>
+                <% } %>
+        <% } %> 
 		 <% if (search_results != null) { %>
                 <p>Search results:</p>
                 <% for (var i = 0; i< search_results.length; i++) { %>
+                    <p><%= search_results[i].mname %></p> 
                     <form method="get" action="/movies">
                         <button type="submit" name = "movie_id" value = <%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
                     </form>
-                    <p><%= search_results[i].mname %></p> 
+                    <img src="<%= search_results[i].poster %>" height = "342"/>
                     <p><%= search_results[i].rating %></p> 
                     <p><%= search_results[i].pname %></p> 
                     <p><%= search_results[i].i_job %></p> 
@@ -46,9 +58,10 @@
                     <p><%= search_results[i].abstraction %></p> 
                     <p><%= search_results[i].date %></p> 
                     <p><%= search_results[i].poster %></p> 
-                    <img src="<%= search_results[i].poster %>" height = "342"/>
+                    
                 <% } %>
             <% } %>
+
     </div>
   </body>
 </html>
