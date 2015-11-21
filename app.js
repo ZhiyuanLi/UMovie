@@ -1,3 +1,5 @@
+console.log('UMovie');
+
 var express = require('express');
 var passport = require('passport');
 var util = require('util');
