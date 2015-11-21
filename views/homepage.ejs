@@ -4,6 +4,10 @@
     <title>UMovie</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+  <form>
+                Search
+                <input type="text" name="search">
+                </form>
   </head>
   <body>
     <nav class="navbar navbar-inverse">
@@ -22,20 +26,42 @@
 	</nav>
     <div class="heading">
     	<% if (latestMovies == null) { %>
-    		<form method="post" action="/homepageResponse">
-    			<p>Welcome to the world of UMovie!</p>
-    			<p>Latest top 5 movie.</p>
-    			<button type="submit" class="btn btn-warning btn-lg">See Results</button>
-    		</form>
+			<p>Welcome to the world of UMovie!</p> 
     	<% }
     		else { %>
     			<p>Welcome to the world of UMovie!</p>
-    			<p>Latest top 5 movie.</p>
+    			<p>Latest top 5 movie</p>
     			<% for (var i = 0; i< latestMovies.length; i++) { %>
     				<p><%= latestMovies[i].name %></p> 
-    				
-    			<% } %>
-    		<% } %>	
+                    <form method="get" action="/homepage/:movie_id">
+                        <button type="submit" name = "movie_id" value = <%= latestMovies[i].movie_id %> class="btn btn-warning btn-lg">See Results</button>
+                    </form>
+    				<p><%= latestMovies[i].abstraction %></p>
+                    <p><%= latestMovies[i].rating %></p>  
+                    <p><%= latestMovies[i].date %></p> 
+                    <p><%= latestMovies[i].poster %></p> 
+                <% } %>
+            <% } %>
+            <% if (search_results != null) { %>
+                <p>Search results:</p>
+                <% for (var i = 0; i< search_results.length; i++) { %>
+                    <p><%= search_results[i].mname %></p> 
+                    <p><%= search_results[i].rating %></p> 
+                    <p><%= search_results[i].pname %></p> 
+                    <p><%= search_results[i].i_job %></p> 
+                    <p><%= search_results[i].rating %></p> 
+                    <p><%= search_results[i].abstraction %></p> 
+                    <p><%= search_results[i].date %></p> 
+                    <p><%= search_results[i].poster %></p> 
+                    <script type="text/javascript">
+                    function load()
+                    {
+                    document.getElementById('image').src = latestMovies[i].poster;
+                    }
+                    </script>
+                    <img src="nothing.jpg" id="image" name="image"/>
+                <% } %>
+            <% } %> 
     </div>
   </body>
 </html>
