@@ -10,22 +10,36 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
-function doMovieQuery(req, res, next) {
-	console.log("1");
-	console.log(req.query.movie_id);
-	console.log("hehe");
-	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "' + req.query.movie_id + '"' ;
-	connection.query(movieQuery, function (err, movieDetail) {
+function doPersonQuery(req, res,  movieDetail, next){
+	var personQuery ='SELECT p.name as pname, i.i_job as job FROM movie m inner join involve_in i on m.movie_id = i.i_mid inner join person p on p.personId = i.i_pid WHERE m.movie_id = "' + req.query.movie_id + '"' ;
+	connection.query(personQuery, function (err, person) {
 		if (!err) {
-			console.log("yes!!");
-			res.render('movie.ejs', {user: req.user, movieDetail: movieDetail, search_results: null});
+			console.log("person!!");
+			res.render('movie.ejs', {user: req.user, person: person, search_results: null, movieDetail: movieDetail});
 		} else
 			next(new Error(500));
 	});
 }
 
+function doMovieQuery(req, res, next) {
+	console.log("1");
+	console.log(req.query.movie_id);
+	console.log("hehe");
+	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "' + req.query.movie_id + '"' ;
+	
+	connection.query(movieQuery, function (err, movieDetail) {
+		if (!err) {
+
+			doPersonQuery(req,res,movieDetail);
+
+		} else
+			next(new Error(500));
+	});
+	
+}
+
 /* get latest movie from mysql database */
-function showSearchMovie(req, res, next) {
+function generateResponse(req, res, next) {
 	if (req.query.search != null) {
 		var searchMovie = 'SELECT m.movie_id, m.name as mname, p.name as pname, i_job, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%")';
 		connection.query(searchMovie, function(err, rows, fields) {
@@ -54,7 +68,7 @@ router.get('/', function (req, res, next) {
 //    }
 //    
 //    else
-    	showSearchMovie(req, res, next);
+    	generateResponse(req, res, next);
 });
 
 module.exports = router;
