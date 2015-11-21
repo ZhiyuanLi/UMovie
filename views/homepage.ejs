@@ -45,6 +45,9 @@
            <% if (search_results != null) { %>
                 <p>Search results:</p>
                 <% for (var i = 0; i< search_results.length; i++) { %>
+                    <form method="get" action="/movies">
+                        <button type="submit" name = "movie_id" value = <%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+                    </form>
                     <p><%= search_results[i].mname %></p> 
                     <p><%= search_results[i].rating %></p> 
                     <p><%= search_results[i].pname %></p> 
