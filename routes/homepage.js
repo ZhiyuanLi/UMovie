@@ -20,6 +20,7 @@ function showSearchMovie(req, res, next) {
 				throw err;
 			} else {
 				res.render('homepage', {
+					user : req.user,
 					search_results : rows,
 					latestMovies : null
 					
@@ -34,6 +35,7 @@ function showSearchMovie(req, res, next) {
 				throw err;
 			} else {
 				res.render('homepage', {
+					user : req.user,
 					latestMovies : rows,
 					search_results:null
 				});
@@ -47,6 +49,7 @@ function showSearchMovie(req, res, next) {
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
+	console.log("nono");
 	showSearchMovie(req, res, next);
 });
 

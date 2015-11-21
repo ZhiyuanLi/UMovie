@@ -25,6 +25,14 @@
 	  </div>
 	</nav>
     <div class="heading">
+    	<% if (!user) { %>
+			<h2>Welcome! Please log in.</h2>
+			<a href="/login">Login</a>
+		<% } else { %>
+			<h2>Hello, <%= user.displayName %>.</h2>
+			<a href="/account">My Account</a>
+			<a href="/logout">Logout</a>
+		<% } %>
     	<% if (latestMovies == null) { %>
 			<p>Welcome to the world of UMovie!</p> 
     	<% }

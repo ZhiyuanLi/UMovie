@@ -18,7 +18,7 @@ function doMovieQuery(req, res, next) {
 	connection.query(movieQuery, function (err, movieDetail) {
 		if (!err) {
 			console.log("yes!!");
-			res.render('movie.ejs', {movieDetail: movieDetail, search_results: null});
+			res.render('movie.ejs', {user: req.user, movieDetail: movieDetail, search_results: null});
 		} else
 			next(new Error(500));
 	});
@@ -33,6 +33,7 @@ function showSearchMovie(req, res, next) {
 				throw err;
 			} else {
 				res.render('movie', {
+					user : req.user,
 					search_results : rows,
 					movieDetail : null
 					
