@@ -13,6 +13,32 @@ var connection = mysql.createConnection({
 
 /* get latest movie from mysql database */
 function showSearchMovie(req, res, next) {
+	if (req.user != null){
+        var user_id = req.user.id;
+        var user_displayName = req.user.displayName;
+        var user_email = req.user.emails[0].value;
+        console.log(user_id);
+        console.log(user_displayName);
+//        check whether user has already stayed in the database
+        var query = 'SELECT * FROM user WHERE email= "' + user_email + '"';
+        console.log(query);
+        connection.query(query, function(err, results){
+            if(err){
+                next(new Error(500));
+            }
+            else if(results.length == 0){
+                // insert user into database
+            	var query_insert = "INSERT INTO user (email, user_name) VALUES ('"+user_email+"', \""+user_displayName+"\")";
+            	console.log(query_insert);
+                connection.query(query_insert, function(err, results){
+                    if(err){
+                        next(new Error(500));
+                    }
+                    	
+                })
+            }
+        });
+	}
 	if (req.query.search != null) {
 		var searchMovie = 'SELECT m.movie_id, m.name as mname, p.name as pname, i_job, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%")';
 		connection.query(searchMovie, function(err, rows, fields) {
