@@ -4,8 +4,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var sample = require('./routes/sampleRoute');
-var yourwork = require('./routes/yourworkRoute');
+var tagsmovie = require('./routes/tagsmovieRoute');
+//var yourwork = require('./routes/yourworkRoute');
 //var homepage = require('./routes/homepageRoute');
 
 var app = express();
@@ -27,10 +27,10 @@ app.use('/', routes);
 
 // if you get a request for the sampleResponse page, call the 'displayResponse'
 // function present in the 'sampleRoute' route
-app.get('/sampleResponse', sample.displayResponse);
+app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 // if you qet a request for the yourworkResponse page, call the
 // 'displayResponse' function present in the 'yourworkRoute' route
-app.get('/yourworkResponse', yourwork.displayResponse);
+//app.get('/yourworkResponse', yourwork.displayResponse);
 //if you qet a request for the homepageResponse page, call the
 //'displayResponse' function present in the 'homepageRoute' route
 //app.get('/homepageResponse', homepage.displayResponse);

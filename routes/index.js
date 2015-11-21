@@ -64,11 +64,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/topRanked', function(req, res, next) {
-	res.render('topRanked');
+	res.render('topranked');
 });
 
 router.get('/tagsMovie', function(req, res, next) {
-	res.render('tagsMovie', {
+	res.render('tagsmovie', {
 		results : null
 	});
 });
