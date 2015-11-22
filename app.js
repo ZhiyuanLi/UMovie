@@ -17,45 +17,13 @@ var flash    = require('connect-flash');
 var configDB = require('./config/database.js');
 require('./config/passport')(passport);
 
+
 var app = express();
 
-//var routes = require('./routes/index');
-//var sample = require('./routes/sampleRoute');
-//var yourwork = require('./routes/yourworkRoute');
 var user = require('./routes/user');
 var session = require('express-session');
 var methodOverride = require('method-override');
 
-//var FACEBOOK_APP_ID = "1124470217565146";
-//var FACEBOOK_APP_SECRET = "2e0342886c07c8ccd95c163894290141";
-//
-//passport.serializeUser(function(user, done) {
-//	done(null, user);
-//});
-//
-//
-//passport.deserializeUser(function(obj, done) {
-//    done(null, obj);
-//});
-//	
-//passport.use(new FacebookStrategy({
-//	        clientID: FACEBOOK_APP_ID,
-//	        clientSecret: FACEBOOK_APP_SECRET,
-//	        callbackURL: "http://localhost:3000/auth/facebook/callback",
-//	        profileFields : ['id', 'displayName', 'emails','photos']
-//	    },
-//	    function(accessToken, refreshToken, profile, done) {
-//	        // asynchronous verification, for effect...
-//	        process.nextTick(function () {
-//	
-//	           // To keep the example simple, the user's Facebook profile is returned to
-//	            // represent the logged-in user.  In a typical application, you would want
-//	            // to associate the Facebook account with a user record in your database,
-//	            // and return that user instead.
-//	            return done(null, profile);
-//	        });
-//	    }
-//	));
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));
@@ -91,10 +59,6 @@ app.get('/', function(req,res){
 	res.render('/',{ user: req.user });
 });
 
-//app.use('/', routes);
-//app.get('/', function(req, res){
-//	    res.render('index', { user: req.user });
-//	});
 app.use('/user', user);
 app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });

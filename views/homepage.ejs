@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>UMovie</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  <form>
-                Search
-                <input type="text" name="search">
-                </form>
-  </head>
-  <body>
-       
-        <% if (!user) { %>
+<head>
+<title>UMovie</title>
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<form>
+	Search <input type="text" name="search">
+</form>
+</head>
+<body>
+	<% if (!user) { %>
 			 <p>Login or Register with:</p>
 
         <a href="/log_in" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
@@ -23,57 +21,52 @@
 			<a href="/logout" class="btn btn-default"><span class="fa fa-user"></span> Logout</a>
 		<% } %>
 
-    <nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="/">UMovie</a>
-	    </div>
-	    <div>
-	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="/">Home</a></li>
-	        <li><a href="/topRanked">Top Ranked</a></li>
-	        <li><a href="/tagsMovie">Movie Tags</a></li> 
-	      </ul>
-	    </div>
-	  </div>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">UMovie</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="/">Home</a></li>
+					<li><a href="/topRanked">Top Ranked</a></li>
+					<li><a href="/tagsMovie">Movie Tags</a></li>
+				</ul>
+			</div>
+		</div>
 	</nav>
-    <div class="heading">
-    	
-    	<% if (latestMovies == null) { %>
-			<p>Welcome to the world of UMovie!</p> 
-    	<% }
-    		else { %>
-    			<p>Welcome to the world of UMovie!</p>
-    			<p>Latest top 5 movie</p>
-    			<% for (var i = 0; i< latestMovies.length; i++) { %>
-    				<p><%= latestMovies[i].name %></p> 
-                    <img src="<%= latestMovies[i].poster %>" height = "342"/>
-                    <form method="get" action="/movies">
-                        <button type="submit" name = "movie_id" value = <%= latestMovies[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
-                    </form>
-    				<p><%= latestMovies[i].abstraction %></p>
-                    <p><%= latestMovies[i].rating %></p>  
-                    <p><%= latestMovies[i].date %></p> 
-                    
-                <% } %>
-            <% } %>
-           <% if (search_results != null) { %>
-                <p>Search results:</p>
-                <% for (var i = 0; i< search_results.length; i++) { %>
-                    <p><%= search_results[i].mname %></p> 
-                    <img src="<%= search_results[i].poster %>" height = "342"/>
-                    <form method="get" action="/movies">
-                        <button type="submit" name = "movie_id" value = <%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
-                    </form>
-                    <p><%= search_results[i].rating %></p> 
-                    <p><%= search_results[i].pname %></p> 
-                    <p><%= search_results[i].i_job %></p> 
-                    <p><%= search_results[i].rating %></p> 
-                    <p><%= search_results[i].abstraction %></p> 
-                    <p><%= search_results[i].date %></p> 
-                    
-                <% } %>
-            <% } %>
-    </div>
-  </body>
+	<div class="heading">
+
+		<% if (latestMovies == null) { %>
+			<p>Welcome to the world of UMovie!</p>
+		<% } else { %>
+			<p>Welcome to the world of UMovie!</p>
+			<p>Latest top 5 movie</p>
+			<% for (var i = 0; i< latestMovies.length; i++) { %>
+				<p><%= latestMovies[i].name %></p>
+				<img src="<%= latestMovies[i].poster %>" height="342" />
+				<form method="get" action="/movies">
+				<button type="submit" name="movie_id" value=<%= latestMovies[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+				</form>
+				<p><%= latestMovies[i].abstraction %></p>
+				<p><%= latestMovies[i].rating %></p>
+				<p><%= latestMovies[i].date %></p>
+			<% } %> 
+		<% } %> 
+
+		<% if (search_results != null) { %>
+			<p>Search results:</p>
+			<% for (var i = 0; i< search_results.length; i++) { %>
+				<p><%= search_results[i].mname %></p>
+				<img src="<%= search_results[i].poster %>" height="342" />
+				<form method="get" action="/movies">
+				<button type="submit" name="movie_id" value=<%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+				</form>
+				<p><%= search_results[i].rating %></p> 
+				<p><%= search_results[i].abstraction %></p>
+				<p><%= search_results[i].date %></p>
+			<% } %>
+		<% } %>
+	</div>
+</body>
 </html>
