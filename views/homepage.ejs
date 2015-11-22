@@ -10,6 +10,19 @@
                 </form>
   </head>
   <body>
+       
+        <% if (!user) { %>
+			 <p>Login or Register with:</p>
+
+        <a href="/log_in" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+      	 <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+		<% } else { %>
+			<h2>Hello, <%= user.email %>.</h2>
+			<a href="/profile" class="btn btn-default"><span class="fa fa-user"></span> My Account</a>
+			<a href="/logout" class="btn btn-default"><span class="fa fa-user"></span> Logout</a>
+		<% } %>
+
     <nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
@@ -25,14 +38,7 @@
 	  </div>
 	</nav>
     <div class="heading">
-    	<% if (!user) { %>
-			<h2>Welcome! Please log in.</h2>
-			<a href="/login">Login</a>
-		<% } else { %>
-			<h2>Hello, <%= user.displayName %>.</h2>
-			<a href="/account">My Account</a>
-			<a href="/logout">Logout</a>
-		<% } %>
+    	
     	<% if (latestMovies == null) { %>
 			<p>Welcome to the world of UMovie!</p> 
     	<% }

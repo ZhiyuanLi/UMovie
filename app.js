@@ -13,6 +13,9 @@ var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
 var tagsmovie = require('./routes/tagsmovieRoute');
 
+var flash    = require('connect-flash');
+var configDB = require('./config/database.js');
+require('./config/passport')(passport);
 
 var app = express();
 
@@ -23,36 +26,36 @@ var user = require('./routes/user');
 var session = require('express-session');
 var methodOverride = require('method-override');
 
-var FACEBOOK_APP_ID = "1124470217565146";
-var FACEBOOK_APP_SECRET = "2e0342886c07c8ccd95c163894290141";
-
-passport.serializeUser(function(user, done) {
-	done(null, user);
-});
-
-
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-});
-	
-passport.use(new FacebookStrategy({
-	        clientID: FACEBOOK_APP_ID,
-	        clientSecret: FACEBOOK_APP_SECRET,
-	        callbackURL: "http://localhost:3000/auth/facebook/callback",
-	        profileFields : ['id', 'displayName', 'emails','photos']
-	    },
-	    function(accessToken, refreshToken, profile, done) {
-	        // asynchronous verification, for effect...
-	        process.nextTick(function () {
-	
-	           // To keep the example simple, the user's Facebook profile is returned to
-	            // represent the logged-in user.  In a typical application, you would want
-	            // to associate the Facebook account with a user record in your database,
-	            // and return that user instead.
-	            return done(null, profile);
-	        });
-	    }
-	));
+//var FACEBOOK_APP_ID = "1124470217565146";
+//var FACEBOOK_APP_SECRET = "2e0342886c07c8ccd95c163894290141";
+//
+//passport.serializeUser(function(user, done) {
+//	done(null, user);
+//});
+//
+//
+//passport.deserializeUser(function(obj, done) {
+//    done(null, obj);
+//});
+//	
+//passport.use(new FacebookStrategy({
+//	        clientID: FACEBOOK_APP_ID,
+//	        clientSecret: FACEBOOK_APP_SECRET,
+//	        callbackURL: "http://localhost:3000/auth/facebook/callback",
+//	        profileFields : ['id', 'displayName', 'emails','photos']
+//	    },
+//	    function(accessToken, refreshToken, profile, done) {
+//	        // asynchronous verification, for effect...
+//	        process.nextTick(function () {
+//	
+//	           // To keep the example simple, the user's Facebook profile is returned to
+//	            // represent the logged-in user.  In a typical application, you would want
+//	            // to associate the Facebook account with a user record in your database,
+//	            // and return that user instead.
+//	            return done(null, profile);
+//	        });
+//	    }
+//	));
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));
@@ -73,6 +76,8 @@ app.use(session({ secret: 'keyboard cat',
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash()); // use connect-flash for flash messages stored in session
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -127,7 +132,8 @@ app.get('/logout', function(req, res){
     res.redirect('/');
 });
 
-
+//routes ======================================================================
+require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
@@ -169,5 +175,6 @@ app.use(function(err, req, res, next) {
 		error : {}
 	});
 });
+
 
 module.exports = app;
