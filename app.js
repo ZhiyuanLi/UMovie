@@ -78,6 +78,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/movies',movie);
+//app.get('/addreview', movie.addReviewResponse);
 
 app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 app.get('/', function(req,res){

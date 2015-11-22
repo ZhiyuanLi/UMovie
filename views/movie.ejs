@@ -25,6 +25,7 @@
 	  </div>
 	</nav>
     <div class="heading">
+    <% var movie_id %>
    		<% if (!user) { %>
 			<h2>Welcome! Please log in.</h2>
 			<a href="/login">Login</a>
@@ -37,20 +38,49 @@
         <% } 
            else { %>
 				<% for(var i=0; i<movieDetail.length; i++) { %>
+                    <% movie_id = movieDetail[i].movie_id%>
                     <p><%= movieDetail[i].name %></p>
                     <img src="<%= movieDetail[i].poster %>" height = "342"/>
                     <p>Rating: <%= movieDetail[i].rating %></p>
                     <p>Abstraction: <%= movieDetail[i].abstraction %></p>
-                    <p> Crew: </p>
+                    
 				<% } %>
-		<% } %>	        
+		<% } %>	
+        <% if (taste == null) { %>
+        <% } 
+           else { %>
+                <% for(var i=0; i<taste.length; i++) { %>
+                <p>
+                <form action= "/movies/addTaste" method="get" value = <%=movie_id%> >
+                <button type="submit" name = "likes" value = <%= 1 %> class="btn btn-warning btn-lg">Like: <%= taste[i].movie_likes %></button>
+                <button type="submit" name = "dislikes" value = <%= 1 %> class="btn btn-warning btn-lg">Dislikes: <%= taste[i].movie_dislikes %></button>
+                </form>
+                </p>  
+                <% } %>
+        <% } %> 
         <% if (person == null) { %>
         <% } 
            else { %>
+                <p> Crew: </p>
                 <% for(var i=0; i<person.length; i++) { %>
                     <p> <%= person[i].job %>: <%= person[i].pname %></p>
                 <% } %>
         <% } %> 
+        <% if (reviews != null) { %>
+                <% for(var i=0; i<reviews.length; i++) { %>
+                    <p> <%= reviews[i].content %></p>
+                <% } %>
+
+            <% } %> 
+        <% if (movieDetail != null) { %>
+            <form action= "/movies/addreview" method="get">
+            <textarea name="review" id="review" style="width:96%;height:90px;background-color:gold;color:olive;border:none;font:22px/30px sans-serif;">
+            </textarea>
+            <button type="submit" name = "movie_id" value = <%=movie_id%> style="background-color:yellowgreen;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Submit
+            </button>
+            </form>
+            <% } %> 
+           
 		 <% if (search_results != null) { %>
                 <p>Search results:</p>
                 <% for (var i = 0; i< search_results.length; i++) { %>
@@ -69,6 +99,7 @@
                     
                 <% } %>
             <% } %>
+            
 
     </div>
   </body>
