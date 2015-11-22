@@ -171,7 +171,7 @@ function checkTasteQuery(req, res, next) {
 		connection.query(checkTasteQuery, function(err, checkTaste) {
 			if (!err) {
 				console.log(checkTaste);
-				if (checkTaste.email == null) {
+				if (checkTaste[0] == null) {
 					addTasteQuery(req, res, next);
 				} else {
 					updateTasteQuery(req, res, next);
