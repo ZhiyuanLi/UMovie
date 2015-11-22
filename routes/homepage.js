@@ -10,22 +10,20 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
-
 /* get latest movie from mysql database */
-function showSearchMovie(req, res, next) {
+function generateResponse(req, res, next) {
 	if (req.query.search != null) {
-		var searchMovie = 'SELECT m.movie_id, m.name as mname, p.name as pname, i_job, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%")';
-		connection.query(searchMovie, function(err, rows, fields) {
+		var people = [];
+		var searchMovie = 'SELECT distinct m.movie_id, m.name as mname, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%")';
+		connection.query(searchMovie, function(err, movies) {
 			if (err) {
 				throw err;
 			} else {
 				res.render('homepage', {
 					user : req.user,
-					search_results : rows,
+					search_results : movies,
 					latestMovies : null
-					
 				});
-				// connection.end();
 			}
 		});
 	} else {
@@ -50,7 +48,7 @@ function showSearchMovie(req, res, next) {
 
 router.get('/', function(req, res, next) {
 	console.log("nono");
-	showSearchMovie(req, res, next);
+	generateResponse(req, res, next);
 });
 
 

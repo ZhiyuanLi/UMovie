@@ -13,12 +13,8 @@ var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
 var tagsmovie = require('./routes/tagsmovieRoute');
 
-
 var app = express();
 
-//var routes = require('./routes/index');
-//var sample = require('./routes/sampleRoute');
-//var yourwork = require('./routes/yourworkRoute');
 var user = require('./routes/user');
 var session = require('express-session');
 var methodOverride = require('method-override');
@@ -29,7 +25,6 @@ var FACEBOOK_APP_SECRET = "2e0342886c07c8ccd95c163894290141";
 passport.serializeUser(function(user, done) {
 	done(null, user);
 });
-
 
 passport.deserializeUser(function(obj, done) {
     done(null, obj);
@@ -78,7 +73,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/movies',movie);
-//app.get('/addreview', movie.addReviewResponse);
 
 app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 app.get('/', function(req,res){
@@ -87,10 +81,6 @@ app.get('/', function(req,res){
 	res.render('/',{ user: req.user });
 });
 
-//app.use('/', routes);
-//app.get('/', function(req, res){
-//	    res.render('index', { user: req.user });
-//	});
 app.use('/user', user);
 app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
