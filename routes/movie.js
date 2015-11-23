@@ -97,7 +97,7 @@ function generateResponse(req, res, next) {
 
 function addReview(req, res, next) {
 	if (req.user == null) {
-		res.render('login');
+		res.redirect('/log_in');
 	} else {
 		var facebook_email = req.user.email;
 		var findUser = ' SELECT email FROM user WHERE email = "'
@@ -163,7 +163,7 @@ function updateTasteQuery(req, res, next) {
 
 function checkTasteQuery(req, res, next) {
 	if (req.user == null) {
-		res.render("login");
+		res.redirect('/log_in');
 	} else {
 		var email = req.user.email;
 		var checkTasteQuery = 'SELECT* FROM user_taste WHERE ut_email = "' + email
@@ -185,7 +185,7 @@ function checkTasteQuery(req, res, next) {
 
 function addTasteQuery(req, res, next) {
 	if (req.user == null) {
-		res.render("login");
+		res.redirect('/log_in');
 	} else {
 		var email = req.user.email;
 		var userlikes = req.query.likes;

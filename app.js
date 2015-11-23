@@ -64,9 +64,9 @@ app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
 });
 
-app.get('/login', function(req, res){
-    res.render('login', { user: req.user });
-});
+//app.get('/login', function(req, res){
+//    res.render('login', { user: req.user });
+//});
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -86,15 +86,15 @@ app.get('/auth/facebook',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    passport.authenticate('facebook', { failureRedirect: '/log_in' }),
     function(req, res) {
         res.redirect('/');
     });
 
-app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-});
+//app.get('/logout', function(req, res){
+//    req.logout();
+//    res.redirect('/');
+//});
 
 //routes ======================================================================
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
@@ -106,7 +106,7 @@ require('./routes/routes.js')(app, passport); // load our routes and pass in our
 //   login page.
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
+    res.redirect('/log_in')
 }
 
 
