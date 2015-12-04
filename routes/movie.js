@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+//added bing
+var Bing = require('node-bing-api')({accKey:"9nJKD6eQWAdjyLr0rPAKzFVZMcx0mnzKDEEfKE6qFsc"});
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
@@ -236,5 +238,6 @@ router.get('/addReview', function(req, res, next) {
 router.get('/addTaste', function(req, res, next) {
 	checkTasteQuery(req, res, next);
 });
+
 
 module.exports = router;

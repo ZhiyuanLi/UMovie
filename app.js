@@ -24,6 +24,9 @@ var user = require('./routes/user');
 var session = require('express-session');
 var methodOverride = require('method-override');
 
+//added bing
+var Bing = require('node-bing-api')({accKey:"9nJKD6eQWAdjyLr0rPAKzFVZMcx0mnzKDEEfKE6qFsc"});
+
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));

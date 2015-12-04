@@ -47,6 +47,8 @@
 			<img src="<%= movieDetail[i].poster %>" height="342" />
 			<p>Rating: <%= movieDetail[i].rating %></p>
 			<p>Abstraction: <%= movieDetail[i].abstraction %></p>
+			<% var name= movieDetail[i].name.split(' ').join("%20")%>
+			<p><a href =<%= "/bing/"+name+"/"+movieDetail[i].movie_id %>>Bing Search</a></p>
 			<% } %> 
 		<% } %> 
 

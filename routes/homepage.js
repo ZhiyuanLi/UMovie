@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Bing = require('node-bing-api')({accKey:"9nJKD6eQWAdjyLr0rPAKzFVZMcx0mnzKDEEfKE6qFsc"});
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
@@ -62,6 +63,30 @@ router.get('/tagsMovie', function(req, res, next) {
 	res.render('tagsmovie', {
 		results : null
 	});
+});
+
+router.get('/bing/:name/:id', function (req, res, next) {
+//	console.log("aaaaaa");
+    if (req.params.name === undefined) {
+        console.log("can't use bing");
+        next(new Error(404));
+    }
+    else {
+//        console.log("add review");
+//        console.log(req.params.name);
+        Bing.web(req.params.name, function (error, ress, body) {
+//            console.log(body
+//            		);
+            res.render('bing', {
+                user: req.user,
+                bodyresults: body.d.results,
+                b_id: req.params.id
+            });
+        }, {
+            top: 10, 
+            skip: 0 
+        })
+    }
 });
 
 
