@@ -68,7 +68,7 @@ router.get('/tagsMovie', function(req, res, next) {
 router.get('/bing/:name/:id', function (req, res, next) {
 //	console.log("aaaaaa");
     if (req.params.name === undefined) {
-        console.log("can't use bing");
+        console.log("movie name undefined");
         next(new Error(404));
     }
     else {
@@ -79,8 +79,8 @@ router.get('/bing/:name/:id', function (req, res, next) {
 //            		);
             res.render('bing', {
                 user: req.user,
-                bodyresults: body.d.results,
-                b_id: req.params.id
+                searchResults: body.d.results,
+                movie_id: req.params.id
             });
         }, {
             top: 10, 

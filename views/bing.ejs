@@ -5,12 +5,12 @@
  </head>
  <body>
   <h1>Bing Search Result</h1>
-  <a href=<%="/movies?movie_id="+b_id%>>Back</a>
+  <a href=<%="/movies?movie_id="+movie_id%>>Back</a>
   <table>
-  <% for (var i = 0; i < bodyresults.length; i++) { %>
+  <% for (var i = 0; i < searchResults.length; i++) { %>
     <tr>
-      <td><a href =<%=  bodyresults[i].Url%>><%= bodyresults[i].Title%></a></td>
-      <td><%= bodyresults[i].Description %></td>
+      <td><a href =<%=  searchResults[i].Url%>><%= searchResults[i].Title%></a></td>
+      <td><%= searchResults[i].Description %></td>
     </tr>    
    <% } %>
   </table>
