@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
 var tagsmovie = require('./routes/tagsmovieRoute');
+var profile = require('./routes/profile');
 
 var flash    = require('connect-flash');
 var configDB = require('./config/database.js');
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/movies',movie);
+app.use('/profile',profile);
 
 app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 app.get('/', function(req,res){
