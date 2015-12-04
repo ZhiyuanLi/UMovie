@@ -22,6 +22,7 @@
     "passport-facebook": ">= 0.0.0",
     "passport-local": "^1.0.0",    
     "connect-flash" : "~0.1.1",     
-    "bcrypt-nodejs": "0.0.3"
+    "bcrypt-nodejs": "0.0.3",
+    "moment":">=0.0.0"
   }
 }

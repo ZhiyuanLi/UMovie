@@ -11,9 +11,7 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
-
 var movie_id;
-
 
 function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
 	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "' + req.query.movie_id + '"';
