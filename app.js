@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
+var topranked = require('./routes/topranked');
 var tagsmovie = require('./routes/tagsmovieRoute');
 
 var flash    = require('connect-flash');
@@ -51,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/movies',movie);
+app.use('/topranked',topranked);
 
 app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 app.get('/', function(req,res){

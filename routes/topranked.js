@@ -21,22 +21,22 @@ function generateResponse(req, res, next) {
 			if (err) {
 				throw err;
 			} else {
-				res.render('homepage', {
+				res.render('topranked', {
 					user : req.user,
 					search_results : movies,
-					latestMovies : null
+					topRankedMovies : null
 				});
 			}
 		});
 	} else {
-		var latestMovie = 'SELECT movie_id, name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 5';
-		connection.query(latestMovie, function(err, rows, fields) {
+		var topRankedMovies = 'SELECT movie_id, name, rating, date, abstraction, poster FROM movie ORDER BY rating DESC LIMIT 10';
+		connection.query(topRankedMovies, function(err, rows, fields) {
 			if (err) {
 				throw err;
 			} else {
-				res.render('homepage', {
+				res.render('topranked', {
 					user : req.user,
-					latestMovies : rows,
+					topRankedMovies : rows,
 					search_results:null
 				});
 				// connection.end();
@@ -49,7 +49,6 @@ function generateResponse(req, res, next) {
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-	console.log("nono");
 	generateResponse(req, res, next);
 });
 
