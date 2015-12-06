@@ -59,9 +59,7 @@ function generateResponse(req, res, next) {
 					latestMovies : rows,
 					search_results:null,
 					bing_search_results:null
-					
 				});
-				// connection.end();
 			}
 		});
 	}
@@ -75,16 +73,6 @@ router.get('/', function(req, res, next) {
 	generateResponse(req, res, next);
 });
 
-
-router.get('/topRanked', function(req, res, next) {
-	res.render('topranked');
-});
-
-router.get('/tagsMovie', function(req, res, next) {
-	res.render('tagsmovie', {
-		results : null
-	});
-});
 
 router.get('/bing/:name/:id', function (req, res, next) {
 //	console.log("aaaaaa");
@@ -109,6 +97,5 @@ router.get('/bing/:name/:id', function (req, res, next) {
         })
     }
 });
-
 
 module.exports = router;

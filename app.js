@@ -11,8 +11,10 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
-var tagsmovie = require('./routes/tagsmovieRoute');
+
 var profile = require('./routes/profile');
+var topranked = require('./routes/topranked');
+var tagsmovie = require('./routes/tagsmovie');
 
 var flash    = require('connect-flash');
 var configDB = require('./config/database.js');
@@ -57,7 +59,9 @@ app.use('/', routes);
 app.use('/movies',movie);
 app.use('/profile',profile);
 
-app.get('/tagsmovieResponse', tagsmovie.displayResponse);
+app.use('/topranked',topranked);
+app.use('/tagsMovie',tagsmovie);
+
 app.get('/', function(req,res){
 	console.log("yesssss");
 	console.log(req.user);
@@ -69,9 +73,7 @@ app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
 });
 
-//app.get('/login', function(req, res){
-//    res.render('login', { user: req.user });
-//});
+
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -96,10 +98,6 @@ app.get('/auth/facebook/callback',
         res.redirect('/');
     });
 
-//app.get('/logout', function(req, res){
-//    req.logout();
-//    res.redirect('/');
-//});
 
 //routes ======================================================================
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport

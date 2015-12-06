@@ -24,7 +24,8 @@
     "connect-flash" : "~0.1.1",     
     "bcrypt-nodejs": "0.0.3",  	
    	"multer": "~0.1.6",
-    "node-bing-api": ">=0.0.0"
+    "node-bing-api": ">=0.0.0",
+    "moment":">=0.0.0"
   }
 }
 
