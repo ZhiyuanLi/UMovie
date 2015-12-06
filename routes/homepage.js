@@ -37,9 +37,8 @@ function generateResponse(req, res, next) {
 				res.render('homepage', {
 					user : req.user,
 					latestMovies : rows,
-					search_results:null
+					search_results : null
 				});
-				// connection.end();
 			}
 		});
 	}

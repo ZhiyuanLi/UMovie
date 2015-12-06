@@ -11,7 +11,24 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
-
+function tagsQuery(req, res, tagsInfo, next) {
+	var tags = req.query.tags;
+	console.log("3",tags);
+	var tagsQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg ON m.movie_id = mg.mg_mid WHERE mg.mg_genre = "' + tags + '"';
+	connection.query (tagsQuery, function (err, tagsResult) {
+		if (!err) {
+			console.log("Tags info already added!");
+			res.render('tagsmovie', {
+				user : req.user,
+				tagsMovie : tagsInfo,
+				tagsResult : tagsResult,
+				search_results : null
+			});
+		} else {
+			next(new Error(500));
+		}
+	});
+}
 
 function generateResponse(req, res, next) {
 
@@ -24,23 +41,18 @@ function generateResponse(req, res, next) {
 				res.render('tagsmovie', {
 					user : req.user,
 					tagsMovie : null,
+					tagsResult : null,
 					search_results : movies
 				});
 			}
 		});
 	} else {
-		console.log("1");
-		var groupGenreQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg ON m.movie_id = mg.mg_mid GROUP BY mg.genre ';
-		connection.query(groupGenreQuery, function(err, tags) {
-			console.log("2");
+		var tagsInfoQuery = 'SELECT genre FROM genre';
+		connection.query(tagsInfoQuery, function(err, tagsInfo) {
 			if (!err) {
-				res.render('tagsmovie', {
-					user : req.user,
-					tagsMovie : tags,
-					search_results : null
-				});
+				console.log("2");
+				tagsQuery(req, res, tagsInfo, next);
 			} else {
-				console.log(err);
 				next(new Error(500));
 			}
 		});
@@ -48,9 +60,12 @@ function generateResponse(req, res, next) {
 }
 
 router.get('/', function (req, res, next) {
-	console.log("0");
-	generateResponse(req, res, next);
-	
+	generateResponse(req, res, next);	
 });
+
+router.get('/tags', function (req, res, tagsInfo,next) {
+	tagsQuery(req, res, tagsInfo, next)
+});
+
 
 module.exports = router;

@@ -39,7 +39,6 @@ function generateResponse(req, res, next) {
 					topRankedMovies : rows,
 					search_results:null
 				});
-				// connection.end();
 			}
 		});
 	}

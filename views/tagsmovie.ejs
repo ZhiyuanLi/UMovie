@@ -1,41 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>UMovie</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="/">UMovie</a>
-	    </div>
-	    <div>
-	      <ul class="nav navbar-nav">
-	        <li><a href="/">Home</a></li>
-	        <li><a href="/topRanked">Top Ranked</a></li>
-	        <li class="active"><a href="/tagsMovie">Movie Tags</a></li>
-	      </ul>
-	    </div>
-	  </div>
+<head>
+<title>UMovie</title>
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<form>
+	Search <input type="text" name="search">
+</form>
+</head>
+<body>
+
+	<% if (!user) { %>
+		<p>Login or Register with:</p>
+        <a href="/log_in" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+      	 <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+		<% } else { %>
+			<h2>Hello, <%= user.email %>.</h2>
+			<a href="/profile" class="btn btn-default"><span class="fa fa-user"></span> My Account</a>
+			<a href="/log_out" class="btn btn-default"><span class="fa fa-user"></span> Logout</a>
+		<% } %>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">UMovie</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="/">Home</a></li>
+					<li><a href="/topRanked">Top Ranked</a></li>
+					<li class="active"><a href="/tagsMovie">Movie Tags</a></li>
+				</ul>
+			</div>
+		</div>
 	</nav>
-    <div class="heading">
-    	<% if (results == null) { %>
-    	   <form method="get" action="/tagsmovieResponse">
-    	   		<p>This is a sample page to help you understand how the MongoDB module works and how you can display the results. The JSON
-    	   		that you get back can be processed either in the EJS file or in the route itself. Take a look at the code and understand
-    	   		this properly. You can also find helpful resources in the 'References' tab above.</p>
-    	   		<p>Clicking on the button below runs a modified version of the first query in the MongoDB part of this homework, i.e finds all the bars in
-    	   		Carnegie and displays the results.</p><br>
-			    <button type="submit" class="btn btn-warning btn-lg">See Results</button>
-			</form>		
-        <% } 
-           else { %>
-				<% for(var i=0; i<results.length; i++) { %>
-					<p><%= results[i] %></p>
-				<% } %>
-		<% } %>	
+	<div class="heading">
+    	<% var movie_id %> 
+
+		<% if (search_results != null) { %>
+			<p>Search results:</p>
+			<% for (var i = 0; i< search_results.length; i++) { %>
+				<p><%= search_results[i].mname %></p>
+				<img src="<%= search_results[i].poster %>" height="342" />
+				<form method="get" action="/movies">
+				<button type="submit" name="movie_id" value=<%= search_results[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+				</form>
+				<p><%= search_results[i].rating %></p> 
+				<p><%= search_results[i].abstraction %></p>
+				<p><%= search_results[i].date %></p>
+			<% } %>
+		<% }
+			else { %>
+				<% if (tagsResult != null) { %>
+					<p>tagsResult[0].mg_genre</p>
+					<% for (var i = 0; i< tagsResult.length; i++) { %>
+					<p><%= tagsResult[i].name %></p>
+					<img src="<%= tagsResult[i].poster %>" height="342" />
+					<form method="get" action="/movies">
+						<button type="submit" name="movie_id" value=<%= tagsResult[i].movie_id %> class="btn btn-warning btn-lg">See more</button>
+					</form>
+					<p><%= tagsResult[i].rating %></p> 
+					<p><%= tagsResult[i].abstraction %></p>
+					<p><%= tagsResult[i].date %></p>
+					<% } %>
+				<% }
+					else %>				
+
+					<% if (tagsMovie == null) { %> 
+					<% } else { %> 
+					<% for(var i=0; i<tagsMovie.length; i++) { %> 
+					<form method="get" action="/tagsMovie">
+						<button type="submit" name = "tags" value=<%= tagsMovie[i].genre %> class="btn btn-warning btn-lg"><%= tagsMovie[i].genre %>
+						</button>
+					</form>
+					<% } %> 
+				<% } %> 
+	<% } %>
+
+		
+
     </div>
   </body>
 </html>

@@ -12,7 +12,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
 var topranked = require('./routes/topranked');
-var tagsmovie = require('./routes/tagsmovieRoute');
+var tagsmovie = require('./routes/tagsmovie');
 
 var flash    = require('connect-flash');
 var configDB = require('./config/database.js');
@@ -53,8 +53,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/movies',movie);
 app.use('/topranked',topranked);
-
-app.get('/tagsmovieResponse', tagsmovie.displayResponse);
+app.use('/tagsMovie',tagsmovie);
+// app.get('/tagsmovieResponse', tagsmovie.displayResponse);
 app.get('/', function(req,res){
 	console.log("yesssss");
 	console.log(req.user);
@@ -66,9 +66,7 @@ app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
 });
 
-//app.get('/login', function(req, res){
-//    res.render('login', { user: req.user });
-//});
+
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the
