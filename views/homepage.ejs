@@ -7,6 +7,9 @@
 <form>
 	Search <input type="text" name="search">
 </form>
+<form>
+	Bing Search <input type="text" name="bingSearch">
+</form>
 </head>
 <body>
 	<% if (!user) { %>
@@ -65,6 +68,18 @@
 				<p><%= search_results[i].rating %></p> 
 				<p><%= search_results[i].abstraction %></p>
 				<p><%= search_results[i].date %></p>
+			<% } %>
+		<% } %>
+		
+		<% if (bing_search_results != null) { %>
+			<p>Bing Search results:</p>
+			<% for (var i = 0; i< bing_search_results.length; i++) { %>
+			<table>
+				 <tr>
+     			 <td><a href =<%=  bing_search_results[i].Url%>><%= bing_search_results[i].Title%></a></td>
+     			 <td><%= bing_search_results[i].Description %></td>
+    			</tr>
+    		</table>
 			<% } %>
 		<% } %>
 	</div>

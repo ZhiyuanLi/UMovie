@@ -25,11 +25,30 @@ function generateResponse(req, res, next) {
 				res.render('homepage', {
 					user : req.user,
 					search_results : movies,
-					latestMovies : null
+					latestMovies : null,
+					bing_search_results: null
 				});
 			}
 		});
-	} else {
+	} 
+	else if(req.query.bingSearch != null){
+//		var bing_search = req.query.bingSearch.split(' ').join('%20');
+//		console.log(bing_search);
+        Bing.web(req.query.bingSearch, function (error, ress, body) {
+//          console.log(body
+//          		);
+          res.render('homepage', {
+        	  bing_search_results: body.d.results,
+        	  search_results : null,
+        	  user : req.user,
+        	  latestMovies : null
+          });
+      }, {
+          top: 10, 
+          skip: 0 
+      })
+	}
+	else {
 		var latestMovie = 'SELECT movie_id, name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 5';
 		connection.query(latestMovie, function(err, rows, fields) {
 			if (err) {
@@ -38,7 +57,9 @@ function generateResponse(req, res, next) {
 				res.render('homepage', {
 					user : req.user,
 					latestMovies : rows,
-					search_results:null
+					search_results:null,
+					bing_search_results:null
+					
 				});
 				// connection.end();
 			}

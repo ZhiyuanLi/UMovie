@@ -27,7 +27,8 @@ function showQueryResult(req, res, movieDetail, person, taste, next) {
 				search_results : null,
 				movieDetail : movieDetail,
 				reviews : reviews,
-				taste : taste
+				taste : taste,
+				bing_search_results : null
 			});
 			console.log("Send movie info back");
 		}
@@ -88,14 +89,36 @@ function generateResponse(req, res, next) {
 					movieDetail : null,
 					person : null,
 					reviews : null,
-					taste : null
+					taste : null,
+					bing_search_results : null
 				});
 			}
 		});
-	} else {
-		doMovieQuery(req, res, next);
+	} 
+	else if(req.query.bingSearch != null){
+		console.log("what?");
+		Bing.web(req.query.bingSearch, function (error, ress, body) {
+//          console.log(body
+//          		);
+          res.render('movie', {
+        	  bing_search_results: body.d.results,
+        	  user : req.user,
+			  search_results : null,
+			  movieDetail : null,
+			  person : null,
+			  reviews : null,
+			  taste : null
+          });
+      }, {
+          top: 10, 
+          skip: 0 
+      })
 	}
-}
+	else {
+		doMovieQuery(req, res, next);
+	}	
+	}
+
 
 function addReview(req, res, next) {
 	if (req.user == null) {
