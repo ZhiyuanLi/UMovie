@@ -71,6 +71,14 @@
 		<% } %> 
 
 
+		<% if (studios == null) { %> 
+		<% } else { %>
+			<p>Studios:</p>
+			<% for(var i=0; i<studios.length; i++) { %>
+			<p><%= studios[i]%></p>
+			<% } %> 
+		<% } %> 
+
 		<% if (reviews != null) { %>
 			<p>Reviews:</p>
 			<% for(var i=0; i<reviews.length; i++) { %>

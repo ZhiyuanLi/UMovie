@@ -1,4 +1,5 @@
 var express = require('express');
+var MongoClient = require('mongodb').MongoClient;
 var router = express.Router();
 var moment = require('moment');
 
@@ -13,18 +14,80 @@ var connection = mysql.createConnection({
 
 var movie_id;
 
-function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
-	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "' + req.query.movie_id + '"';
-	connection.query(reviewQuery, function (err, reviewInfo) {
-		if (!err) {
-			res.render('movie.ejs' ,{
-				user : req.user,
-				person : personInfo,
-				search_results : null,
-				movieDetail : movieInfo,
-				reviews : reviewInfo,
-				taste : tasteInfo
+function getStudios(StudioIds, db, callback) {
+	var studioIdArray = [];
+	StudioIds.forEach(function(result){studioIdArray.push(result.studio_id)});
+	var cursor = db.collection('studio').find({
+		'studioId' : {
+			$in : studioIdArray
+		}
+	});
+	var studios = [];
+	cursor.each(function(err, doc) {
+		if (doc != null) {
+			// console.log(doc);
+			studios.push(doc.name);
+		} else {
+			callback(studios);
+		}
+	});
+};
+
+function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo,
+		StudioIds, next) {
+	// The url to connect to the mongodb instance
+	var url = 'mongodb://jimmy:cis550@ds063124.mongolab.com:63124/umovie';
+	MongoClient.connect(url, function(err, mongodb) {
+		// If there is an error, log the error and render the error page
+		if (err != null) {
+			console.log("Connection to server failed.");
+			mongodb.close();
+			res.render('error', {
+				message : "Connection to server failed.",
+				error : err
 			});
+		}
+		// If there is no error while connecting, proceed further
+		else {
+			console.log("Connected correctly to server.");
+			getStudios(StudioIds, mongodb, function(studios) {
+				mongodb.close();
+				res.render('movie.ejs', {
+					user : req.user,
+					person : personInfo,
+					search_results : null,
+					movieDetail : movieInfo,
+					reviews : reviewInfo,
+					taste : tasteInfo,
+					studios : studios
+				});
+			});
+		}
+	});
+
+}
+
+function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo,
+		reviewInfo, next) {
+	var StudioIdQuery = 'SELECT studio_id FROM movie m inner join movie_studio ms on m.movie_id = ms.ms_mid WHERE m.movie_id = "'
+			+ req.query.movie_id + '"';
+	connection.query(StudioIdQuery, function(err, StudioIds) {
+		if (!err) {
+			doStudioQuery(req, res, movieInfo, personInfo, tasteInfo,
+					reviewInfo, StudioIds, next);
+		} else {
+			next(new Error(500));
+		}
+	});
+}
+
+function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
+	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "'
+			+ req.query.movie_id + '"';
+	connection.query(reviewQuery, function(err, reviewInfo) {
+		if (!err) {
+			doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo,
+					reviewInfo, next);
 		} else {
 			next(new Error(500));
 		}
@@ -32,8 +95,9 @@ function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
 }
 
 function doTasteQuery(req, res, movieInfo, personInfo, next) {
-	var tasteQuery = 'SELECT sum(likes) as movie_likes, sum(dislikes) as movie_dislikes FROM user_taste WHERE ut_mid = "' + req.query.movie_id + '"';
-	connection.query(tasteQuery, function (err, tasteInfo) {
+	var tasteQuery = 'SELECT sum(likes) as movie_likes, sum(dislikes) as movie_dislikes FROM user_taste WHERE ut_mid = "'
+			+ req.query.movie_id + '"';
+	connection.query(tasteQuery, function(err, tasteInfo) {
 		if (!err) {
 			doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next);
 		} else {
@@ -43,9 +107,10 @@ function doTasteQuery(req, res, movieInfo, personInfo, next) {
 }
 
 function doPersonQuery(req, res, movieInfo, next) {
-	var personQuery = 'SELECT p.name as pname, i.i_job as job FROM movie m INNER JOIN involve_in i ON m.movie_id = i.i_mid ' + 
-					'INNER JOIN person p ON p.personId = i.i_pid WHERE m.movie_id = "' + req.query.movie_id + '"';
-	connection.query(personQuery, function (err, personInfo) {
+	var personQuery = 'SELECT p.name as pname, i.i_job as job FROM movie m INNER JOIN involve_in i ON m.movie_id = i.i_mid '
+			+ 'INNER JOIN person p ON p.personId = i.i_pid WHERE m.movie_id = "'
+			+ req.query.movie_id + '"';
+	connection.query(personQuery, function(err, personInfo) {
 		if (!err) {
 			doTasteQuery(req, res, movieInfo, personInfo, next);
 		} else {
@@ -56,8 +121,9 @@ function doPersonQuery(req, res, movieInfo, next) {
 
 function doMovieQuery(req, res, next) {
 	movie_id = req.query.movie_id;
-	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "' + req.query.movie_id + '"';
-	connection.query(movieQuery, function (err, movieInfo) {
+	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "'
+			+ req.query.movie_id + '"';
+	connection.query(movieQuery, function(err, movieInfo) {
 		if (!err) {
 			doPersonQuery(req, res, movieInfo);
 		} else {
@@ -66,15 +132,21 @@ function doMovieQuery(req, res, next) {
 	});
 }
 
-function doSearchQuery (req, res, next) {
-	var searchQuery = 'SELECT distinct m.movie_id, m.name as mname, p.name as pname, rating, date, abstraction, poster ' + 
-						'FROM movie m INNER JOIN involve_in i ON m.movie_id = i. i_mid ' + 
-						'INNER JOIN person p ON p.personId = i.i_pid ' +
-						'WHERE UPPER(m.name) LIKE UPPER(' + '"%' + req.query.search + '%")' + 
-						'OR UPPER(p.name) LIKE UPPER(' + '"%' + req.query.search + '%")';
-	connection.query(searchQuery, function (err, searchInfo) {
+function doSearchQuery(req, res, next) {
+	var searchQuery = 'SELECT distinct m.movie_id, m.name as mname, p.name as pname, rating, date, abstraction, poster '
+			+ 'FROM movie m INNER JOIN involve_in i ON m.movie_id = i. i_mid '
+			+ 'INNER JOIN person p ON p.personId = i.i_pid '
+			+ 'WHERE UPPER(m.name) LIKE UPPER('
+			+ '"%'
+			+ req.query.search
+			+ '%")'
+			+ 'OR UPPER(p.name) LIKE UPPER('
+			+ '"%'
+			+ req.query.search
+			+ '%")';
+	connection.query(searchQuery, function(err, searchInfo) {
 		if (!err) {
-			console.log("show search result") ;
+			console.log("show search result");
 			res.render('movie', {
 				user : req.user,
 				search_results : searchInfo,
@@ -100,9 +172,10 @@ function ratingQuery(req, res, next) {
 		res.redirect('/log_in');
 	} else {
 		var review_id = req.query.review_id;
-		console.log("check reviewid",review_id);
-		var searchRatingQuery = ' SELECT review_rating, review_count, email FROM review WHERE review_id = "' + review_id + '"';
-		connection.query(searchRatingQuery, function (err, rows) {
+		console.log("check reviewid", review_id);
+		var searchRatingQuery = ' SELECT review_rating, review_count, email FROM review WHERE review_id = "'
+				+ review_id + '"';
+		connection.query(searchRatingQuery, function(err, rows) {
 			if (err) {
 				throw err;
 			} else {
@@ -110,24 +183,30 @@ function ratingQuery(req, res, next) {
 					var review_rating = new Number();
 					var review_count = rows[0].review_count;
 					review_count++;
-					review_rating = Number(rows[0].review_rating) + Number(req.query.rating);
-					var addRatingQuery = 'UPDATE review SET review_rating = "' + review_rating + '", review_count = "' + review_count + '"WHERE review_id = "' + review_id + '"';
-					connection.query(addRatingQuery, function (err, rating) {
+					review_rating = Number(rows[0].review_rating)
+							+ Number(req.query.rating);
+					var addRatingQuery = 'UPDATE review SET review_rating = "'
+							+ review_rating + '", review_count = "'
+							+ review_count + '"WHERE review_id = "' + review_id
+							+ '"';
+					connection.query(addRatingQuery, function(err, rating) {
 						if (err) {
 							throw err;
 						} else {
-							redirectMovies(req, res, movie_id, "rating already added!");
-							console.log("rating updated!") ;
+							redirectMovies(req, res, movie_id,
+									"rating already added!");
+							console.log("rating updated!");
 						}
 					});
 				} else {
-					redirectMovies(req, res, movie_id, "can't rating your own reviews!");
-					console.log("can't rating your own review") ;
-				// inform user that can't rating their own reviews	
+					redirectMovies(req, res, movie_id,
+							"can't rating your own reviews!");
+					console.log("can't rating your own review");
+					// inform user that can't rating their own reviews
 				}
 			}
 		});
-	}	
+	}
 }
 
 function reviewQuery(req, res, next) {
@@ -135,39 +214,57 @@ function reviewQuery(req, res, next) {
 		res.redirect('/log_in');
 	} else {
 		var countReviewQuery = 'SELECT COUNT(*) as num FROM review';
-		connection.query (countReviewQuery, function (err, countReview) {
-			if (err) {
-				throw err;
-			} else {
-				var review_id = countReview[0].num + 1;
-				var email = req.user.email;
-				var time = new Date();
-				var content = req.query.review;
-				var rating = 0;
-		 		var timeline = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + 
-							time.getDate() + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-				var addReviewQuery = 'INSERT INTO review (review_id, time, review_rating, content, email, movie_id) VALUES ("' + 
-									review_id + '","' + timeline + '","' + rating + '","' + content + '","' + email + '","' + movie_id + '")';
-				connection.query(addReviewQuery, function (err, review) {
-					if (err) {
-						throw err;
-					} else {
-						redirectMovies(req, res, movie_id, "Review already added!");
-						console.log("Review already added!");
-					} 
-				});
-			}
-		});
+		connection
+				.query(
+						countReviewQuery,
+						function(err, countReview) {
+							if (err) {
+								throw err;
+							} else {
+								var review_id = countReview[0].num + 1;
+								var email = req.user.email;
+								var time = new Date();
+								var content = req.query.review;
+								var rating = 0;
+								var timeline = time.getFullYear() + "-"
+										+ (time.getMonth() + 1) + "-"
+										+ time.getDate() + " "
+										+ time.getHours() + ":"
+										+ time.getMinutes() + ":"
+										+ time.getSeconds();
+								var addReviewQuery = 'INSERT INTO review (review_id, time, review_rating, content, email, movie_id) VALUES ("'
+										+ review_id
+										+ '","'
+										+ timeline
+										+ '","'
+										+ rating
+										+ '","'
+										+ content
+										+ '","'
+										+ email + '","' + movie_id + '")';
+								connection.query(addReviewQuery, function(err,
+										review) {
+									if (err) {
+										throw err;
+									} else {
+										redirectMovies(req, res, movie_id,
+												"Review already added!");
+										console.log("Review already added!");
+									}
+								});
+							}
+						});
 	}
 }
 
-function updateTasteQuery (req, res, next) {
+function updateTasteQuery(req, res, next) {
 	var email = req.user.email;
 	var userlikes = req.query.likes;
 	var userdislikes = req.query.dislikes;
-	var updateTasteQuery = 'UPDATE user_taste SET likes = "' + userlikes + '", dislikes = "' + userdislikes + 
-							'" WHERE ut_email = "' + email + '" AND ut_mid = "' + movie_id + '"';
-	connection.query(updateTasteQuery, function (err, updateTaste) {
+	var updateTasteQuery = 'UPDATE user_taste SET likes = "' + userlikes
+			+ '", dislikes = "' + userdislikes + '" WHERE ut_email = "' + email
+			+ '" AND ut_mid = "' + movie_id + '"';
+	connection.query(updateTasteQuery, function(err, updateTaste) {
 		if (!err) {
 			redirectMovies(req, res, movie_id, "Taste already updated!");
 			console.log("Taste already updated!");
@@ -184,9 +281,15 @@ function addTasteQuery(req, res, next) {
 		var email = req.user.email;
 		var userlikes = req.query.likes;
 		var userdislikes = req.query.dislikes;
-		var addTasteQuery = 'INSERT INTO user_taste (ut_email,ut_mid,likes,dislikes) VALUES ("' + 
-							email + '","' + movie_id + '","' + userlikes + '","' + userdislikes + '")';
-		connection.query(addTasteQuery, function (err, addtaste) {
+		var addTasteQuery = 'INSERT INTO user_taste (ut_email,ut_mid,likes,dislikes) VALUES ("'
+				+ email
+				+ '","'
+				+ movie_id
+				+ '","'
+				+ userlikes
+				+ '","'
+				+ userdislikes + '")';
+		connection.query(addTasteQuery, function(err, addtaste) {
 			if (!err) {
 				redirectMovies(req, res, movie_id, "Taste already added!");
 				console.log("Taste already added!");
@@ -202,8 +305,9 @@ function tasteQuery(req, res, next) {
 		res.redirect('/log_in');
 	} else {
 		var email = req.user.email;
-		var checkTasteQuery = 'SELECT* FROM user_taste WHERE ut_email = "' + email + '" AND ut_mid = "' + movie_id + '"';
-		connection.query(checkTasteQuery, function (err, taste) {
+		var checkTasteQuery = 'SELECT* FROM user_taste WHERE ut_email = "'
+				+ email + '" AND ut_mid = "' + movie_id + '"';
+		connection.query(checkTasteQuery, function(err, taste) {
 			if (!err) {
 				console.log(taste);
 				if (taste[0] == null) {
@@ -229,24 +333,24 @@ function redirectMovies(req, res, movie_id, msg) {
 
 /* get latest movie from mysql database */
 
-router.get('/', function (req, res, next) {
+router.get('/', function(req, res, next) {
 	if (req.query.movie_id == undefined) {
 		console.log("movie_id not defined");
 		next(new Error(404));
 	} else {
 		generateResponse(req, res, next);
-	 }	
+	}
 });
 
-router.get('/addReview', function (req, res, next) {
+router.get('/addReview', function(req, res, next) {
 	reviewQuery(req, res, next);
 });
 
-router.get('/addRating', function (req, res, next) {
+router.get('/addRating', function(req, res, next) {
 	ratingQuery(req, res, next);
 });
 
-router.get('/addTaste', function (req, res, next) {
+router.get('/addTaste', function(req, res, next) {
 	tasteQuery(req, res, next);
 });
 
