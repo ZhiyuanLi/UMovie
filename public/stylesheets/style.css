@@ -26,6 +26,11 @@
 
 html, body{ height: 100%; }
 
+toptext{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 18px;
+}
+
 body {
 	line-height: 1;
 	color: #7a7e83;
@@ -123,6 +128,31 @@ h6.s-title span{
 
 /* LAYOUT----------------------------------------------------------*/
 
+#videobar{
+	position: ;
+	width: 100%;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	margin-left:150px;
+}
+
+#filmbar{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	position: relative;
+	width: 100%;
+	font-size: 30px;
+	line-height: 60px;
+	color:#fff;
+	background:  #1d2127;
+	font-weight: bold;
+}
+
+#filmbar #filmbar-text{
+	width: 600px;
+	overflow: hidden;
+	margin-left: 12px;	
+}
+
 .content-col{ 
 	float: left; 
 	width: 620px;
@@ -183,7 +213,7 @@ h6.s-title span{
 
 #header{
 	position: relative;
-	height: 314px;
+	height: 178px;
 }
 
 #header #top-torn{
@@ -201,10 +231,10 @@ h6.s-title span{
 	position: absolute;
 	overflow: hidden;
 	top: 80px;
-	right: 0px;
+	right: 130px;
 	width: 700px;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
-	font-size: 24px;
+	font-size: 30px;
 	line-height: 1.3em;
 	color: #d9e2ef;
 	font-weight: lighter;
@@ -252,7 +282,7 @@ h6.s-title span{
 #nav{
 	display: block;
 	position: absolute;
-	top: 236px;
+	top: 100px;
 	left: 10px;
 	height: 79px;
 	width: 940px;
@@ -654,7 +684,7 @@ h6.s-title span{
 
 .top-search{
 	position: absolute;
-	top: -5px;
+	top: 16px;
 	right: 10px;
 }
 
@@ -690,7 +720,7 @@ h6.s-title span{
 .social{
 	position: absolute;
 	top: 10px;
-	right: 10px;
+	left: 10px;
 	display: block;
 	overflow: hidden;
 }
@@ -739,10 +769,15 @@ h6.s-title span{
 
 .blocks-thumbs li .thumb{
 	display: block;
+	margin: 0;
+  	padding: 0;
+  	border: none;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	line-height: 0em;
 	background: url(../img/bg/patterns/obl-1x1.png);
+	line-height: 0em;
+	height: 450px;
+	width: 300px;
 }
 
 .blocks-thumbs li .excerpt{
