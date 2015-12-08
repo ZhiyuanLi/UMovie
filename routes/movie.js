@@ -167,9 +167,7 @@ function doSearchQuery(req, res, next) {
 
 function doBingSearch(req, res, next){
 	console.log("99999");
-	Bing.web(req.query.bingSearch, function (error, ress, body) {
-//		console.log(body
-//		);
+	Bing.web(req.query.bingSearch, function (error, ress, body) { 
 		res.render('movie', {
 			bing_search_results: body.d.results,
 			user : req.user,

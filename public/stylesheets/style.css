@@ -145,6 +145,9 @@ h6.s-title span{
 	color:#fff;
 	background:  #1d2127;
 	font-weight: bold;
+	border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	-webkit-border-radius: 10px 10px 0px 0px;
 }
 
 #filmbar #filmbar-text{
@@ -391,12 +394,13 @@ h6.s-title span{
 /* TAGS --------------------------------------------------------*/
 
 .tags{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
 	display: block;
 	overflow: hidden;
 	padding-bottom: 35px;
 	padding-left: 10px;
-	font-size: 12px;
-	width: 620px;
+	font-size: 20px;
+	width: 960px;
 }
 
 .tags li{
@@ -404,7 +408,7 @@ h6.s-title span{
 	float: left;
 	margin-right: 5px;
 	margin-bottom: 10px;
-	line-height: 14px;
+	line-height: 25px;
 }
 
 .tags li span{
@@ -745,6 +749,19 @@ h6.s-title span{
 
 /* HOME TABS THUMBS ---------------------------------------------------------*/
 
+.blocks-movies{
+	overflow: hidden;
+}
+
+.blocks-movies li{
+	display: block;
+	float: left;
+	margin: 5px 10px 10px 10px;
+	width: 110px;
+	
+	line-height: 25em;
+}
+
 .blocks-thumbs{
 	overflow: hidden;
 }
@@ -762,6 +779,20 @@ h6.s-title span{
 	
 	line-height: 1em;
 }
+
+.blocks-thumbs li2{
+	display: block;
+	overflow: hidden;
+	float: right;
+	width: 620px;
+	margin: 0px 10px 20px 10px;
+	-webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+	-moz-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+	box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+	
+	line-height: 1em;
+}
+
 
 .blocks-thumbs li:hover{
 	background: #fff url(../img/more.png) no-repeat bottom right;
@@ -783,10 +814,22 @@ h6.s-title span{
 .blocks-thumbs li .excerpt{
 	line-height: 1.5em;
 	margin: 10px 10px 10px 10px;
+	width: 300px;
+	height : 90px
+	
 }
 
 
 .blocks-thumbs li .header{
+	display: block;
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 20px;
+	line-height: 1.4em;
+	margin: 0px 0px 10px 0px;
+	text-decoration: none;
+	color: #282d34;
+}
+.blocks-thumbs li2 .header{
 	display: block;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 20px;
@@ -802,9 +845,24 @@ h6.s-title span{
 	display: block;
 	margin-bottom: 5px;
 }
+.blocks-thumbs li2 .text{
+	text-decoration: none;
+	color: #7a7e83;
+	display: block;
+	margin-bottom: 5px;
+}
 
 .blocks-thumbs li .meta{
-	font-size: 10px;
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 15px;
+	margin-bottom: 5px;
+	color: #c1c1c0;
+}
+
+.blocks-thumbs li2 .meta{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 15px;
+	margin-bottom: 5px;
 	color: #c1c1c0;
 }
 
