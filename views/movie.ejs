@@ -133,9 +133,29 @@
                <br>
                <% for (var i = 0; i< movieDetail.length; i++) { %>
                <% movie_id = movieDetail[i].movie_id; %>
-               <li >
-                  <img src="<%= movieDetail[i].poster %>" alt="Post" width = "300" height = "450" />
-               </li>
+               <li3 >
+                  <img src="<%= movieDetail[i].poster %>" alt="Post" width = "310" height = "450" />
+
+
+
+                  <!-- taste -->
+                  <div class="wrapper">
+                  <% if (taste == null || taste.length == 0) { %>
+                  <% } else { %>
+                  <% for(var j=0; j<taste.length; j++) { %>
+                  <form action= "/movies/addTaste" method="get" >
+                     <div class="buttons-holder">
+                        <button type="submit" name = "likes" value = <%= 1 %> class="button-like">Like <span><%= taste[j].movie_likes %></span></button>
+                        <button type="submit" name = "dislikes" value = <%= 1 %> class="button-dislike">Dislikes <span><%= taste[j].movie_dislikes %></span></button>
+                     </div>
+                  </form>
+                  <% } %>  
+                  <% } %> 
+                  </div>
+               <!-- ENDS taste -->
+
+
+               </li3>
                <div class="wrapper">
                   <li2>
                      <div class="wrapper">
@@ -180,28 +200,12 @@
                      </div>
                   </li2>
                </div>
-               <!-- taste -->
-
-
-               <% if (taste == null || taste.length == 0) { %>
-               <% } else { %>
-               <% for(var i=0; i<taste.length; i++) { %>
-               <form action= "/movies/addTaste" method="get" >
-                  <div class="buttons-holder">
-                     <button type="submit" name = "likes" value = <%= 1 %> class="button-like">Like <span><%= taste[i].movie_likes %></span></button>
-                     <button type="submit" name = "dislikes" value = <%= 1 %> class="button-dislike">Dislikes <span><%= taste[i].movie_dislikes %></span></button>
-                  </div>
-               </form>
-               <% } %>  
-               <% } %> 
-
                
-               <!-- ENDS taste -->
                <% } %> 
                <% } %>
             </ul>
          </div>
-
+         
          <!-- review -->
          <div class ="wraper">
             <div class="review">
@@ -210,15 +214,18 @@
                   <h3 class="p-title">Reviews</h3>
                   <% for(var i=0; i<reviews.length; i++) { %>
                   <br>
-                  <h6 clas="s-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href = <%= "/users/"+reviews[i].email %>><%= reviews[i].email%></a> : <%= reviews[i].content %></h6>
+                  <h6 clas="s-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= reviews[i].content %></h6>
                   <br>
                   <div class="wrapper">
                   <!-- filmbar -->      
                      <div id="reviewbar">
+                     <div id = "reivewbar-text">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href = <%= "/users/"+reviews[i].email %>><%= reviews[i].email%></a>
+                        <br>
                         <% if(reviews[i].review_count == 0) { %>
-                        <div id = "reivewbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time : <%= reviews[i].time%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating : 0</div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time : <%= reviews[i].time%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating : 0
                         <% } else { %>
-                        <div id = "reivewbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time : <%= reviews[i].time%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating : <%= Number(reviews[i].review_rating / reviews[i].review_count).toFixed(1) %></div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time : <%= reviews[i].time%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating : <%= Number(reviews[i].review_rating / reviews[i].review_count).toFixed(1) %></div>
                          <% } %>
                      </div>
                   </div>
@@ -230,7 +237,7 @@
                         <input type="radio" name="rating" value="4"><i></i>
                         <input type="radio" name="rating" value="5"><i></i>
                      </span>
-                     <button type = "submit" name="review_id" value=<%= reviews[i].review_id %>style="background-color:yellowgreen;color:white;padding:5px;font-size:12px;border:none;padding:4px;" >rate it</button>
+                     <button type = "submit" name="review_id" value=<%= reviews[i].review_id %> style="background-color:yellowgreen;color:white;padding:5px;font-size:12px;border:none;padding:4px;" >rate it</button>
                   </form>
                   <br>
                   <% } %> 
@@ -248,7 +255,7 @@
                <div class="cancel-comment-reply"><a rel="nofollow" id="cancel-comment-reply-link" href="#respond" style="display:none;">Cancel reply</a></div>
                <form action="/movies/addreview" method="get" id="commentform">
                   <textarea name="review" id="review"  tabindex="4"></textarea>
-                  <button type="submit" name="movie_id" value=<%= movie_id%>style="background-color:yellowgreen;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Submit
+                  <button type="submit" name="movie_id" value=<%= movie_id%> style="background-color:yellowgreen;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Submit
                   </button>
                </form>
             </div>

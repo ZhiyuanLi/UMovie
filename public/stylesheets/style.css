@@ -563,10 +563,10 @@ h6.s-title span{
 .button-dislike{
 	display: table;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
-	font-size: 18px;
+	font-size: 16px;
 	color: #3c590b;
-	background: #c2ee77 /* url(../img/button-download.png) no-repeat center left */;
-/* 	padding: 10px 23px 10px 15px; */
+	background: #c2ee77   url(../img/button-dislike.png) no-repeat center left;
+    padding: 10px 23px 10px 85px; 
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -577,7 +577,7 @@ h6.s-title span{
 
 .button-dislike:hover{
 	color: #3c590b;
-	background: #c2fd5a url(../img/button-download.png) no-repeat center left;
+	background: #c2fd5a url(../img/button-dislike.png) no-repeat center left;
 }
 
 .button-dislike span{
@@ -593,10 +593,10 @@ h6.s-title span{
 .button-like{
 	display: table;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
-	font-size: 18px;
+	font-size: 16px;
 	color: #bc5788;
-	background: #ffd8eb /* url(../img/button-love.png) no-repeat center left */;
-/* 	padding: 10px 23px 10px 15px; */
+	background: #ffd8eb  url(../img/button-like.png) no-repeat center left ;
+ 	padding: 10px 23px 10px 85px; 
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -607,7 +607,7 @@ h6.s-title span{
 
 .button-like:hover{
 	color: #bc5788;
-	background: #fec6e2 url(../img/button-love.png) no-repeat center left;
+	background: #fec6e2 url(../img/button-like.png) no-repeat center left;
 }
 
 .button-like span{
@@ -822,13 +822,24 @@ h6.s-title span{
 	display: block;
 	overflow: hidden;
 	float: left;
-	width: 620px;
-	height: 450px;
+	width: 610px;
+	height: 530px;
 	margin: 0px 10px 20px 10px;
 	
 	line-height: 1em;
 }
 
+.blocks-thumbs li3{
+	display: block;
+	overflow: hidden;
+	float: left;
+	width: 310px;
+	height: 530px;
+	margin: 0px 10px 20px 10px;
+
+	
+	line-height: 1em;
+}
 
 .blocks-thumbs li:hover{
 	background: #fff url(../img/more.png) no-repeat bottom right;
