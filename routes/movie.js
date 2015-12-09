@@ -155,7 +155,7 @@ function doSearchQuery(req, res, next) {
 		+ 'OR UPPER(p.name) LIKE UPPER('
 		+ '"%'
 		+ req.query.search
-		+ '%")';
+		+ '%") LIMIT 6';
 	connection.query(searchQuery, function(err, searchInfo) {
 		if (!err) {
 			console.log("show search result");

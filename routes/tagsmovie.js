@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
 
 
 function doSearchQuery (req, res, nest) {
-	var searchMovie = 'SELECT distinct m.movie_id, m.name as mname, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%")';
+	var searchMovie = 'SELECT distinct m.movie_id, m.name as mname, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%") limit 6';
 	connection.query(searchMovie, function(err, movies) {
 		if (!err) {
 			res.render('tagsmovie', {
@@ -47,7 +47,7 @@ function doBingSearch(req, res, next){
 
 function doTagsMovieQuery(req, res, next) {
 	var tags = req.query.tags;
-	var tagsQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg ON m.movie_id = mg.mg_mid WHERE mg.mg_genre = "' + tags + '"';
+	var tagsQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg ON m.movie_id = mg.mg_mid WHERE mg.mg_genre = "' + tags + '" limit 45';
 	connection.query (tagsQuery, function (err, tagsResult) {
 		if (!err) {
 			console.log("Tags info already added!");
