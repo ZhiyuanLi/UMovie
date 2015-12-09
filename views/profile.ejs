@@ -116,11 +116,21 @@
 					<% for (var i =0; i <userFriends1.length; i++){ %>
 					<tr>
       				<td class="col-sm-4"><strong><%= userFriends1[i].person1%><strong></td>
+      				<td>
+      					<form action= "/deleteFriend" method="get" >
+						<button type="submit"  name = "deleteFriend" value = <%= userFriends1[i].person1%>  style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Delete Friend</button>
+						</form>
+					</td>
     				</tr> 
     				<% } %>
     				<% for (var i =0; i <userFriends2.length; i++){ %>
 					<tr>
       				<td class="col-sm-4"><strong><%= userFriends2[i].person2%><strong></td>
+      				<td>
+      					<form action= "/deleteFriend" method="get" >
+						<button type="submit"  name = "deleteFriend" value = <%= userFriends2[i].person2%>  style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Delete Friend</button>
+						</form>
+					</td>
     				</tr>  
 					<% } %>
 					</table>

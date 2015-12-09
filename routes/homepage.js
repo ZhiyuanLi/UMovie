@@ -138,6 +138,14 @@ function redirectUserAccountPage(req, res, email2, msg) {
 	res.end();
 }
 
+function redirectProfilePage(req, res, msg){
+	req.session.msg = msg;
+	res.writeHead(302, {
+		'Location' : '/profile'
+	});
+	res.end();
+}
+
 function addFriendQuery(req, res, next) {
 	if (req.user == null) {
 		res.redirect('/');
@@ -184,6 +192,33 @@ function friendQuery(req, res, next) {
 				}
 			} else {
 				next(new Error(500));
+			}
+		});
+
+	}
+}
+
+function deleteFriendQuery(req, res, next){
+	if (req.user == null) {
+		res.redirect('/');
+	} else {
+		var email1 = req.user.email;
+		var email2 = req.query.deleteFriend;
+		var deleteFriendQuery = 'DELETE  FROM friends WHERE person1 ="'
+			+ email1
+			+ '" AND person2="'
+			+ email2 + 
+			'" OR person1 ="'
+			+ email2
+			+ '" AND person2="'
+			+ email1 +'"';
+		console.log(deleteFriendQuery);
+		connection.query(deleteFriendQuery, function(err, deleteFriend) {
+			if (err) {
+				console.log("ppppp");
+				throw err;
+			} else {
+				redirectProfilePage(req, res, "successfully delete this friend!");
 			}
 		});
 
@@ -242,6 +277,11 @@ router.get('/users/:email', function (req, res, next) {
 
 router.get('/addFriend', function(req, res, next) {
 	friendQuery(req, res, next);
+});
+
+router.get('/deleteFriend/', function(req, res, next) {
+	console.log("aaa66666");
+	deleteFriendQuery(req, res, next);
 });
 
 module.exports = router;
