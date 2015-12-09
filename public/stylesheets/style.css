@@ -136,6 +136,48 @@ h6.s-title span{
 	margin-left:200px;
 }
 
+#reviewbar{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	position: relative;
+	float: right;
+	margin-right: 20px;
+	width: 380px;
+	font-size: 15px;
+	line-height: 20px;
+	color:#000;
+	background: url(../img/bg/patterns/obl-1x1-light.png);
+	
+	border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+}
+
+#reviewbar #reviewbar-text{
+	width: 600px;
+	overflow: hidden;
+	margin-left: 12px;	
+}
+
+#titlebar{
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	position: relative;
+	width: 620px;
+	font-size: 30px;
+	line-height: 60px;
+	color:#fff;
+	background:  #1d2127;
+	font-weight: bold;
+	border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+}
+
+#titlebar #titlebar-text{
+	width: 600px;
+	overflow: hidden;
+	margin-left: 12px;	
+}
+
 #filmbar{
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	position: relative;
@@ -453,6 +495,17 @@ h6.s-title span{
 
 /* Content ------------------------------------------------------------*/
 
+.review{
+	margin-bottom: 30px;
+	-webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+	-moz-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+	box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+}
+
+.review .padding{
+	padding: 12px;
+}
+
 .content{
 	background: #fff;
 	-webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
@@ -500,20 +553,20 @@ h6.s-title span{
 	padding: 10px 2px;
 }
 
-.buttons-holder a{
+.buttons-holder button{
 	float: left;
-	margin-right: 20px;
+	margin-left: 10px;
 }
 
-/* DOWNLOAD BUTTON ------------------------------------------------------------*/
+/* DISLIKE BUTTON ------------------------------------------------------------*/
 
-.content .button-download{
+.button-dislike{
 	display: table;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 18px;
 	color: #3c590b;
-	background: #c2ee77 url(../img/button-download.png) no-repeat center left;
-	padding: 10px 23px 10px 100px;
+	background: #c2ee77 /* url(../img/button-download.png) no-repeat center left */;
+/* 	padding: 10px 23px 10px 15px; */
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -522,12 +575,12 @@ h6.s-title span{
 	box-shadow: 0px 1px 2px rgba(0,0,0,.5); 
 }
 
-.content .button-download:hover{
+.button-dislike:hover{
 	color: #3c590b;
 	background: #c2fd5a url(../img/button-download.png) no-repeat center left;
 }
 
-.content .button-download span{
+.button-dislike span{
 	display: block;
 	font-family:  arial, serif;
 	font-size: 10px;
@@ -535,15 +588,15 @@ h6.s-title span{
 	line-height: 1em;
 }
 
-/* LOVE BUTTON ------------------------------------------------------------*/
+/* LIKE BUTTON ------------------------------------------------------------*/
 
-.content .button-love{
+.button-like{
 	display: table;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 18px;
 	color: #bc5788;
-	background: #ffd8eb url(../img/button-love.png) no-repeat center left;
-	padding: 10px 23px 10px 100px;
+	background: #ffd8eb /* url(../img/button-love.png) no-repeat center left */;
+/* 	padding: 10px 23px 10px 15px; */
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -552,12 +605,12 @@ h6.s-title span{
 	box-shadow: 0px 1px 2px rgba(0,0,0,.5); 
 }
 
-.content .button-love:hover{
+.button-like:hover{
 	color: #bc5788;
 	background: #fec6e2 url(../img/button-love.png) no-repeat center left;
 }
 
-.content .button-love span{
+.button-like span{
 	display: block;
 	font-family:  arial, serif;
 	font-size: 10px;
@@ -749,19 +802,6 @@ h6.s-title span{
 
 /* HOME TABS THUMBS ---------------------------------------------------------*/
 
-.blocks-movies{
-	overflow: hidden;
-}
-
-.blocks-movies li{
-	display: block;
-	float: left;
-	margin: 5px 10px 10px 10px;
-	width: 110px;
-	
-	line-height: 25em;
-}
-
 .blocks-thumbs{
 	overflow: hidden;
 }
@@ -773,9 +813,7 @@ h6.s-title span{
 	width: 300px;
 	margin: 0px 10px 20px 10px;
 	background: #fff;
-	-webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
-	-moz-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
-	box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
+
 	
 	line-height: 1em;
 }
@@ -783,12 +821,10 @@ h6.s-title span{
 .blocks-thumbs li2{
 	display: block;
 	overflow: hidden;
-	float: right;
+	float: left;
 	width: 620px;
+	height: 450px;
 	margin: 0px 10px 20px 10px;
-	-webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
-	-moz-box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
-	box-shadow: 0px 1px 2px rgba(0,0,0,.1); 
 	
 	line-height: 1em;
 }
@@ -833,8 +869,8 @@ h6.s-title span{
 	display: block;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 20px;
-	line-height: 1.4em;
-	margin: 0px 0px 10px 0px;
+	line-height: 1.0em;
+	margin: 8px 0px 8px 10px;
 	text-decoration: none;
 	color: #282d34;
 }
@@ -849,7 +885,7 @@ h6.s-title span{
 	text-decoration: none;
 	color: #7a7e83;
 	display: block;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 }
 
 .blocks-thumbs li .meta{
@@ -861,9 +897,13 @@ h6.s-title span{
 
 .blocks-thumbs li2 .meta{
 	font-family: 'Yanone Kaffeesatz', arial, serif;
-	font-size: 15px;
-	margin-bottom: 5px;
-	color: #c1c1c0;
+	font-size: 18px;
+	margin-bottom: 4px;
+	margin-right: 350px;
+	margin-left: 15px;
+	margin-top: 4px;
+	color: #4e534e;
+	line-height: 1.19em;
 }
 
 /* SKILLS --------------------------------------------------------*/
@@ -899,6 +939,7 @@ h6.s-title span{
 
 #commentform,
 #contactForm{
+	width: 100%;
 	margin-bottom: 18px;
 }
 
@@ -930,7 +971,7 @@ h6.s-title span{
 
 #contactForm textarea,
 #commentform textarea{
-	width: 410px;
+	width: 905px;
 	height: 230px;
 }
 
