@@ -87,7 +87,7 @@
 		<% if (reviews != null) { %>
 			<p>Reviews:</p>
 			<% for(var i=0; i<reviews.length; i++) { %>
-				<p><%= reviews[i].content %></p>
+				<p><a href = <%= "/users/"+reviews[i].email %>><%= reviews[i].email%></a> : <%= reviews[i].content %></p>
 				<% if(reviews[i].review_count == 0) { %>
 					<p>Rating: 0</p>
 				<% }

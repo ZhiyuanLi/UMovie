@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/homepage');
 var movie = require('./routes/movie');
+var userAccount = require('./routes/userAccount');
 
 var profile = require('./routes/profile');
 var topranked = require('./routes/topranked');
@@ -58,6 +59,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/movies',movie);
 app.use('/profile',profile);
+//app.use('/users',userAccount);
 
 app.use('/topranked',topranked);
 app.use('/tagsMovie',tagsmovie);

@@ -1,10 +1,9 @@
-<!-- views/profile.ejs -->
 <!doctype html>
 <html>
 <head>
 	
 	<meta charset="utf-8">
-		<title>Node Authentication</title>
+		<title>User Homepage</title>
 		<!-- CSS -->
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
@@ -69,8 +68,11 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
-		<a href="/log_out" class="btn btn-default btn-sm">Logout</a>
+		<h1><span class="fa fa-anchor"></span> User Homepage</h1>
+		
+		<form action= "/addFriend" method="get" >
+		<a href="/" style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Home</a>
+		<button type="submit"  name = "addFriend" value = <%=email%>  style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Add Friend</button>
 	</div>
 
 	<div class="row">
@@ -79,20 +81,20 @@
 		<div class="col-sm-12">
 			<div class="well">
 			 
-				<h3><span class="fa fa-user"></span> User Name:    <%= user.email %></h3>
+				<h3><span class="fa fa-user"></span> User Name:    <%= email %></h3>
 
 				
 				<div class = "content">
 				<div class = "padding">
 				<div class="col-sm-6">
-					<h3 class = "p-title">Movie I Liked</h3>
+					<h3 class = "p-title">Liked Movies</h3>
 					<% for (var i =0; i <userLike.length; i++){ %>
 					<p><%= userLike[i].likeMovie%></p>
 					<% } %>
 					<br>
 					</div>
 					<div class="col-sm-6">
-					<h3 class = "p-title">Movie I Disliked</h3>
+					<h3 class = "p-title">Disliked Movies</h3>
 					<% for (var i =0; i <userDislike.length; i++){ %>
 					<p><%= userDislike[i].dislikeMovie%></p>
 					<% } %>
@@ -100,7 +102,7 @@
 					</div>
 					
 					<div class="col-sm-12">
-					<h3 class = "p-title">My reviews</h3>
+					<h3 class = "p-title">Reviews</h3>
 					<table>
 					<% for (var i =0; i <userComment.length; i++){ %>
 					<tr>
