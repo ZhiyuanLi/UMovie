@@ -15,21 +15,29 @@ function getRandomInt(length) {
 }
 
 function doLikeMovieQuery(req, res, likesGenreInfo, next) {
-	if (likesGenreInfo == null) {
-		getUserInfo(req, res, likesGenreInfo, null, next);
+	if (likesGenreInfo.length < 1) {
+		var highRatingQuery = 'SELECT * FROM movie ORDER BY rating DESC LIMIT 5';
+		connection.query(highRatingQuery, function(err, likesMovieInfo) {
+			if (!err) {
+				getUserInfo(req, res, likesGenreInfo, likesMovieInfo, next);
+			} else {
+				next(new Error(500));
+			}
+		});
 	} else {
 		var genre;
 		var length = likesGenreInfo.length;
 		if (length == 1) {
-			genre = likesGenreInfo[0];
+			genre = likesGenreInfo[0].mg_genre;
 		} else {
 			var index = getRandomInt(length);
 			genre = likesGenreInfo[index].mg_genre;
 		}
-		var likeMovieQuery = 'SELECT m.movie_id FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id AND mg.mg_genre = "'
-				+ genre + '"ORDER BY m.rating';
+		var likeMovieQuery = 'SELECT * FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id AND mg.mg_genre = "'
+				+ genre + '"ORDER BY m.rating DESC LIMIT 5';
 		connection.query(likeMovieQuery, function(err, likesMovieInfo) {
 			if (!err) {
+				console.log(likesMovieInfo);
 				getUserInfo(req, res, likesGenreInfo, likesMovieInfo, next);
 			} else {
 				next(new Error(500));
@@ -39,8 +47,10 @@ function doLikeMovieQuery(req, res, likesGenreInfo, next) {
 }
 
 function doLikeGenreQuery(req, res, likesInfo, next) {
-	if (likesInfo == null) {
-		doLikeMovieQuery(req, res, null, next);
+	 
+	if (likesInfo.length <1) {
+		var likesGenreInfo = [];
+		doLikeMovieQuery(req, res, likesGenreInfo, next);
 	} else {
 		var movie_id;
 		var length = likesInfo.length;
@@ -50,10 +60,12 @@ function doLikeGenreQuery(req, res, likesInfo, next) {
 			var index = getRandomInt(length);
 			movie_id = likesInfo[index].ut_mid
 		}
+		
 		var likeGenreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "'
 				+ movie_id + '"';
 		connection.query(likeGenreQuery, function(err, likesGenreInfo) {
 			if (!err) {
+				console.log(likesGenreInfo);
 				doLikeMovieQuery(req, res, likesGenreInfo, next);
 			} else {
 				next(new Error(500));
@@ -67,6 +79,7 @@ function doLikeRecommendationQuery(req, res, next) {
 			+ req.user.email + '"AND likes = 1';
 	connection.query(likeQuery, function(err, likesInfo) {
 		if (!err) {
+			console.log(likesInfo);
 			doLikeGenreQuery(req, res, likesInfo, next);
 		} else {
 			next(new Error(500));
@@ -148,7 +161,7 @@ function userFriends2(req, res, likesGenreInfo, likesMovieInfo, userLike,
 		} else {
 			res.render('profile.ejs', {
 				user : req.user,
-				LikeRecommendation : likesMovieInfo,
+				likeRecommendation : likesMovieInfo,
 				userLike : userLike,
 				userDislike : userDislike,
 				userComment : userComment,

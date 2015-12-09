@@ -134,6 +134,12 @@
     				</tr>  
 					<% } %>
 					</table>
+					<h3 class = "p-title">Recommendation</h3>
+					<% for (var i =0; i <likeRecommendation.length; i++){ %>
+					<% if (likeRecommendation[i].movie_id !=null){ %>
+					<p><%= likeRecommendation[i].name%></p>
+					<% } %>
+					<% } %>
 					</div>
 					</div>
 </div>
