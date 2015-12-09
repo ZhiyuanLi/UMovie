@@ -135,9 +135,13 @@
 					<% } %>
 					</table>
 					<h3 class = "p-title">Recommendation</h3>
-					<% for (var i =0; i <likeRecommendation.length; i++){ %>
-					<% if (likeRecommendation[i].movie_id !=null){ %>
-					<p><%= likeRecommendation[i].name%></p>
+					<% if (likeRecommendation.length < 1) {%> 
+					<% }else{ %>
+					<p>Based on the movie you liked: <%=likeRecommendation[0].name%>
+					<% } %>
+					<% for (var i =0; i <likeMovie.length; i++){ %>
+					<% if (likeMovie[i].movie_id !=null){ %>
+					<p><%= likeMovie[i].name%></p>
 					<% } %>
 					<% } %>
 					</div>

@@ -14,12 +14,12 @@ function getRandomInt(length) {
 	return Math.floor(Math.random() * length);
 }
 
-function doLikeMovieQuery(req, res, likesGenreInfo, next) {
+function doLikeMovieQuery(req, res, recommendationInfo, likesGenreInfo, next) {
 	if (likesGenreInfo.length < 1) {
 		var highRatingQuery = 'SELECT * FROM movie ORDER BY rating DESC LIMIT 5';
-		connection.query(highRatingQuery, function(err, likesMovieInfo) {
+		connection.query(highRatingQuery, function (err, likesMovieInfo) {
 			if (!err) {
-				getUserInfo(req, res, likesGenreInfo, likesMovieInfo, next);
+				getUserInfo(req, res, recommendationInfo, likesMovieInfo, next);
 			} else {
 				next(new Error(500));
 			}
@@ -33,12 +33,12 @@ function doLikeMovieQuery(req, res, likesGenreInfo, next) {
 			var index = getRandomInt(length);
 			genre = likesGenreInfo[index].mg_genre;
 		}
-		var likeMovieQuery = 'SELECT * FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id AND mg.mg_genre = "'
-				+ genre + '"ORDER BY m.rating DESC LIMIT 5';
-		connection.query(likeMovieQuery, function(err, likesMovieInfo) {
+		console.log(genre);
+		var likeMovieQuery = 'SELECT * FROM movie INNER JOIN (SELECT temp1.movie_id FROM (SELECT m.movie_id AS movie_id FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id WHERE mg.mg_genre = "'+ genre + '") temp1 LEFT JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "'+ req.user.email + '"AND likes = 1) temp2 ON temp1.movie_id = temp2.movie_id WHERE temp2.movie_id IS NULL) temp3 ON temp3.movie_id = movie.movie_id ORDER BY rating DESC LIMIT 5'; 
+		connection.query(likeMovieQuery, function (err, likesMovieInfo) {
 			if (!err) {
 				console.log(likesMovieInfo);
-				getUserInfo(req, res, likesGenreInfo, likesMovieInfo, next);
+				getUserInfo(req, res, recommendationInfo, likesMovieInfo, next);
 			} else {
 				next(new Error(500));
 			}
@@ -47,26 +47,29 @@ function doLikeMovieQuery(req, res, likesGenreInfo, next) {
 }
 
 function doLikeGenreQuery(req, res, likesInfo, next) {
-	 
+	var recommendationInfo = [];
 	if (likesInfo.length <1) {
 		var likesGenreInfo = [];
-		doLikeMovieQuery(req, res, likesGenreInfo, next);
+		doLikeMovieQuery(req, res, recommendationInfo, likesGenreInfo, next);
 	} else {
 		var movie_id;
 		var length = likesInfo.length;
+		var recommendationInfo = [];
 		if (length == 1) {
 			movie_id = likesInfo[0].ut_mid;
+			recommendationInfop[0] = likesInfo[0];
 		} else {
 			var index = getRandomInt(length);
 			movie_id = likesInfo[index].ut_mid
+			recommendationInfo[0] = likesInfo[index];
 		}
-		
 		var likeGenreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "'
 				+ movie_id + '"';
-		connection.query(likeGenreQuery, function(err, likesGenreInfo) {
+		connection.query(likeGenreQuery, function (err, likesGenreInfo) {
 			if (!err) {
+				console.log(recommendationInfo);
 				console.log(likesGenreInfo);
-				doLikeMovieQuery(req, res, likesGenreInfo, next);
+				doLikeMovieQuery(req, res, recommendationInfo, likesGenreInfo, next);
 			} else {
 				next(new Error(500));
 			}
@@ -75,8 +78,7 @@ function doLikeGenreQuery(req, res, likesInfo, next) {
 }
 
 function doLikeRecommendationQuery(req, res, next) {
-	var likeQuery = 'SELECT ut_mid FROM user_taste WHERE ut_email = "'
-			+ req.user.email + '"AND likes = 1';
+	var likeQuery = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.user.email + '"AND likes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(likeQuery, function(err, likesInfo) {
 		if (!err) {
 			console.log(likesInfo);
@@ -94,74 +96,69 @@ function isLoggedIn(req, res, next) {
 	res.redirect('/');
 }
 
-function getUserInfo(req, res, likesGenreInfo, likesMovieInfo, next) {
+function getUserInfo(req, res, recommendationInfo, likesMovieInfo, next) {
 	var profileQuery = 'select name as likeMovie from movie, user_taste where user_taste.ut_mid = movie.movie_id and user_taste.likes = 1 and user_taste.ut_email ="'
 			+ req.user.email + '"';
-	connection.query(profileQuery, function(err, userLike) {
+	connection.query(profileQuery, function (err, userLike) {
 		if (err) {
 			throw err;
 		} else {
-			userDislike(req, res, likesGenreInfo, likesMovieInfo, userLike,
-					next);
+			userDislike(req, res, recommendationInfo, likesMovieInfo, userLike, next);
 		}
 	});
 }
 
-function userDislike(req, res, likesGenreInfo, likesMovieInfo, userLike, next) {
+function userDislike(req, res, recommendationInfo, likesMovieInfo, userLike, next) {
 	var profileQuery2 = 'select name as dislikeMovie from movie, user_taste where user_taste.ut_mid = movie.movie_id and user_taste.likes = 0 and user_taste.ut_email ="'
 			+ req.user.email + '"';
-	connection.query(profileQuery2, function(err, userDislike) {
+	connection.query(profileQuery2, function (err, userDislike) {
 		if (err) {
 			throw err;
 		} else {
-			userComment(req, res, likesGenreInfo, likesMovieInfo, userLike,
-					userDislike, next);
+			userComment(req, res, recommendationInfo, likesMovieInfo, userLike, userDislike, next);
 		}
 	});
 }
 
-function userComment(req, res, likesGenreInfo, likesMovieInfo, userLike,
-		userDislike, next) {
+function userComment(req, res, recommendationInfo, likesMovieInfo, userLike, userDislike, next) {
 	var profileQuery3 = 'select content,movie.name from review,movie where movie.movie_id = review.movie_id and review.email ="'
 			+ req.user.email + '"';
 
-	connection.query(profileQuery3, function(err, userComment) {
+	connection.query(profileQuery3, function (err, userComment) {
 		if (err) {
 			throw err;
 		} else {
-			userFriends1(req, res, likesGenreInfo, likesMovieInfo, userLike,
+			userFriends1(req, res, recommendationInfo, likesMovieInfo, userLike,
 					userDislike, userComment, next);
 		}
 	});
 }
 
-function userFriends1(req, res, likesGenreInfo, likesMovieInfo, userLike,
-		userDislike, userComment, next) {
+function userFriends1(req, res, recommendationInfo, likesMovieInfo, userLike, userDislike, userComment, next) {
 	var profileQuery4 = 'select person1 from friends where person2 ="'
 			+ req.user.email + '" AND person1 <> "' + req.user.email + '"';
-
-	connection.query(profileQuery4, function(err, userFriends1) {
+	connection.query(profileQuery4, function (err, userFriends1) {
 		if (err) {
 			throw err;
 		} else {
-			userFriends2(req, res, likesGenreInfo, likesMovieInfo, userLike,
+			userFriends2(req, res, recommendationInfo, likesMovieInfo, userLike,
 					userDislike, userComment, userFriends1, next);
 		}
 	});
 }
 
-function userFriends2(req, res, likesGenreInfo, likesMovieInfo, userLike,
-		userDislike, userComment, userFriends1, next) {
+function userFriends2(req, res, recommendationInfo, likesMovieInfo, userLike, userDislike, userComment, userFriends1, next) {
 	var profileQuery5 = 'select person2 from friends where person1 ="'
 			+ req.user.email + '" AND person2 <> "' + req.user.email + '"';
 
-	connection.query(profileQuery5, function(err, userFriends2) {
+	connection.query(profileQuery5, function (err, userFriends2) {
 		if (err) {
 			throw err;
 		} else {
 			res.render('profile.ejs', {
 				user : req.user,
-				likeRecommendation : likesMovieInfo,
+				likeRecommendation : recommendationInfo,
+				likeMovie : likesMovieInfo,
 				userLike : userLike,
 				userDislike : userDislike,
 				userComment : userComment,

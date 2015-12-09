@@ -131,7 +131,6 @@ function doPersonQuery(req, res, movieInfo, next) {
 }
 
 
-
 function doMovieQuery(req, res, next) {
 	movie_id = req.query.movie_id;
 	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "'
