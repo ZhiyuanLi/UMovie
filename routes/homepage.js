@@ -49,7 +49,7 @@ function generateResponse(req, res, next) {
       })
 	}
 	else {
-		var latestMovie = 'SELECT movie_id, name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 5';
+		var latestMovie = 'SELECT movie_id, name, rating, date, abstraction, poster FROM movie ORDER BY date DESC LIMIT 12';
 		connection.query(latestMovie, function(err, rows, fields) {
 			if (err) {
 				throw err;

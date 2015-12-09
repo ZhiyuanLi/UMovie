@@ -36,8 +36,7 @@ function getStudios(StudioIds, db, callback) {
 	});
 };
 
-function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo,
-		StudioIds, next) {
+function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, genreInfo, StudioIds, next) {
 	// The url to connect to the mongodb instance
 	var url = 'mongodb://jimmy:cis550@ds063124.mongolab.com:63124/umovie';
 	MongoClient.connect(url, function(err, mongodb) {
@@ -62,8 +61,9 @@ function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo,
 					movieDetail : movieInfo,
 					reviews : reviewInfo,
 					taste : tasteInfo,
-					bing_search_results : null,
-					studios : studios
+					genre : genreInfo, 
+					studios : studios,
+					bing_search_results : null	
 				});
 			});
 		}
@@ -71,14 +71,23 @@ function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo,
 
 }
 
-function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo,
-		reviewInfo, next) {
+function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, genreInfo, next) {
 	var StudioIdQuery = 'SELECT studio_id FROM movie m inner join movie_studio ms on m.movie_id = ms.ms_mid WHERE m.movie_id = "'
 		+ req.query.movie_id + '"';
 	connection.query(StudioIdQuery, function(err, StudioIds) {
 		if (!err) {
-			doStudioQuery(req, res, movieInfo, personInfo, tasteInfo,
-					reviewInfo, StudioIds, next);
+			doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, genreInfo, StudioIds, next);
+		} else {
+			next(new Error(500));
+		}
+	});
+}
+
+function doGenreQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, next) {
+	var genreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "' + req.query.movie_id + '"';
+	connection.query(genreQuery, function(err, genreInfo){
+		if (!err) {
+			doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, genreInfo, next)
 		} else {
 			next(new Error(500));
 		}
@@ -86,12 +95,10 @@ function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo,
 }
 
 function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
-	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "'
-		+ req.query.movie_id + '"';
+	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "' + req.query.movie_id + '"';
 	connection.query(reviewQuery, function(err, reviewInfo) {
 		if (!err) {
-			doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo,
-					reviewInfo, next);
+			doGenreQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, next);
 		} else {
 			next(new Error(500));
 		}
@@ -122,6 +129,8 @@ function doPersonQuery(req, res, movieInfo, next) {
 		}
 	});
 }
+
+
 
 function doMovieQuery(req, res, next) {
 	movie_id = req.query.movie_id;
@@ -158,8 +167,9 @@ function doSearchQuery(req, res, next) {
 				person : null,
 				reviews : null,
 				taste : null,
-				bing_search_results : null,
-				studios : null
+				genre : null,
+				studios : null,
+				bing_search_results : null	
 			});
 		}
 	});
@@ -167,18 +177,17 @@ function doSearchQuery(req, res, next) {
 
 function doBingSearch(req, res, next){
 	console.log("99999");
-	Bing.web(req.query.bingSearch, function (error, ress, body) {
-//		console.log(body
-//		);
+	Bing.web(req.query.bingSearch, function (error, ress, body) { 
 		res.render('movie', {
-			bing_search_results: body.d.results,
 			user : req.user,
 			search_results : null,
 			movieDetail : null,
 			person : null,
 			reviews : null,
 			taste : null,
-			studios : null
+			genre : null,
+			studios : null,
+			bing_search_results: body.d.results
 		});
 	}, {
 		top: 10, 
@@ -191,7 +200,7 @@ function generateResponse(req, res, next) {
 	if (req.query.search != null) {
 		doSearchQuery(req, res, next);
 	} else if(req.query.bingSearch != null){
-		console.log("666");
+
 		doBingSearch(req, res, next);
 	} else {
 		doMovieQuery(req, res, next);
