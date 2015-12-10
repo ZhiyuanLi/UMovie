@@ -47,7 +47,7 @@ function doBingSearch(req, res, next){
 
 function doTagsMovieQuery(req, res, next) {
 	var tags = req.query.tags;
-	var tagsQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg ON m.movie_id = mg.mg_mid WHERE mg.mg_genre = "' + tags + '" limit 45';
+	var tagsQuery = 'SELECT * FROM movie m INNER JOIN movie_genre mg use index (genre) ON m.movie_id = mg.mg_mid WHERE mg.mg_genre = "' + tags + '" limit 45';
 	connection.query (tagsQuery, function (err, tagsResult) {
 		if (!err) {
 			console.log("Tags info already added!");

@@ -72,7 +72,7 @@ function doStudioQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, g
 }
 
 function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, genreInfo, next) {
-	var StudioIdQuery = 'SELECT studio_id FROM movie m inner join movie_studio ms on m.movie_id = ms.ms_mid WHERE m.movie_id = "'
+	var StudioIdQuery = 'SELECT studio_id FROM movie_studio WHERE ms_mid = "'
 		+ req.query.movie_id + '"';
 	connection.query(StudioIdQuery, function(err, StudioIds) {
 		if (!err) {
