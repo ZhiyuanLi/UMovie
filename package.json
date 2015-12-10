@@ -12,6 +12,20 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "mysql": "~2.6.1",
+    "bootstrap": "*",
+    "ejs": ">= 0.0.0",
+    "method-override": ">= 2.0.2",
+    "express-session": ">= 1.6.1",
+    "passport": ">= 0.0.0",
+    "passport-facebook": ">= 0.0.0",
+    "passport-local": "^1.0.0",    
+    "connect-flash" : "~0.1.1",     
+    "bcrypt-nodejs": "0.0.3",  	
+   	"multer": "~0.1.6",
+    "node-bing-api": ">=0.0.0",
+    "moment":">=0.0.0"
   }
 }
+
