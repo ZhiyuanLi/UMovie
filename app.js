@@ -24,7 +24,6 @@ require('./config/passport')(passport);
 
 var app = express();
 
-var user = require('./routes/user');
 var session = require('express-session');
 var methodOverride = require('method-override');
 
@@ -70,7 +69,6 @@ app.get('/', function(req,res){
 	res.render('/',{ user: req.user });
 });
 
-app.use('/user', user);
 app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
 });

@@ -161,7 +161,7 @@ h6.s-title span{
 #titlebar{
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	position: relative;
-	width: 620px;
+	width: 610px;
 	font-size: 30px;
 	line-height: 60px;
 	color:#fff;
@@ -824,7 +824,7 @@ h6.s-title span{
 	float: left;
 	width: 610px;
 	height: 530px;
-	margin: 0px 10px 20px 10px;
+	margin: 0px 5px 5px 5px;
 	
 	line-height: 1em;
 }
@@ -880,7 +880,7 @@ h6.s-title span{
 	display: block;
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 20px;
-	line-height: 1.0em;
+	line-height: 1.1em;
 	margin: 8px 0px 8px 10px;
 	text-decoration: none;
 	color: #282d34;
@@ -909,12 +909,13 @@ h6.s-title span{
 .blocks-thumbs li2 .meta{
 	font-family: 'Yanone Kaffeesatz', arial, serif;
 	font-size: 18px;
+	width:570px;
 	margin-bottom: 4px;
 	margin-right: 350px;
 	margin-left: 15px;
 	margin-top: 4px;
 	color: #4e534e;
-	line-height: 1.19em;
+	line-height: 1.2em;
 }
 
 /* SKILLS --------------------------------------------------------*/

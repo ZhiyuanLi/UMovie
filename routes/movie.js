@@ -145,18 +145,8 @@ function doMovieQuery(req, res, next) {
 }
 
 function doSearchQuery(req, res, next) {
-	var searchQuery = 'SELECT distinct m.movie_id, m.name as mname, p.name as pname, rating, date, abstraction, poster '
-		+ 'FROM movie m INNER JOIN involve_in i ON m.movie_id = i. i_mid '
-		+ 'INNER JOIN person p ON p.personId = i.i_pid '
-		+ 'WHERE UPPER(m.name) LIKE UPPER('
-		+ '"%'
-		+ req.query.search
-		+ '%")'
-		+ 'OR UPPER(p.name) LIKE UPPER('
-		+ '"%'
-		+ req.query.search
-		+ '%") LIMIT 6';
-	connection.query(searchQuery, function(err, searchInfo) {
+	var searchMovie = 'SELECT distinct m.movie_id, m.name as mname, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%") limit 99';
+	connection.query(searchMovie, function(err, searchInfo) {
 		if (!err) {
 			console.log("show search result");
 			res.render('movie', {

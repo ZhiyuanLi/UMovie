@@ -186,6 +186,19 @@
                         <% } %> 
                         <!-- ENDS crewinfo -->
 
+                        <!-- crewinfo -->
+                        <% if (genre == null || genre.length==0) { %> 
+                        <% } else { %>
+                        <div class ="header">Genre: </div>
+                        
+                        <div class="meta">
+                           <% for(var i=0; i< genre.length ; i++) { %>
+                           <%= genre[i].mg_genre %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <% } %>
+                        </div>
+                        <% } %> 
+                        <!-- ENDS crewinfo -->
+
                         <!-- studioinfo -->
                         <% if (studios == null || studios.length == 0) { %> 
                         <% } else { %>
@@ -214,7 +227,7 @@
                   <h3 class="p-title">Reviews</h3>
                   <% for(var i=0; i<reviews.length; i++) { %>
                   <br>
-                  <h6 clas="s-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= reviews[i].content %></h6>
+                  <h6 clas="s-title"><%= reviews[i].content %></h6>
                   <br>
                   <div class="wrapper">
                   <!-- filmbar -->      
@@ -254,7 +267,7 @@
                <h3 class="s-title">Leave a Comment <span>Spam not allowed!</span></h3>
                <div class="cancel-comment-reply"><a rel="nofollow" id="cancel-comment-reply-link" href="#respond" style="display:none;">Cancel reply</a></div>
                <form action="/movies/addreview" method="get" id="commentform">
-                  <textarea name="review" id="review"  tabindex="4"></textarea>
+                  <textarea name="review" id="review" ></textarea>
                   <button type="submit" name="movie_id" value=<%= movie_id%> style="background-color:yellowgreen;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Submit
                   </button>
                </form>
