@@ -92,7 +92,7 @@ module.exports = function(passport) {
 passport.use(new FacebookStrategy({
   clientID: FACEBOOK_APP_ID,
   clientSecret: FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback",
+  callbackURL: "http://ec2-52-90-205-71.compute-1.amazonaws.com:3000/auth/facebook/callback",
   profileFields : ['id', 'displayName', 'emails','photos']
 },
 function(accessToken, refreshToken, profile, done) {
