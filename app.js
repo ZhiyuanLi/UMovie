@@ -58,7 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/movies',movie);
 app.use('/profile',profile);
-//app.use('/users',userAccount);
+app.use('/userAccount',userAccount);
 
 app.use('/topranked',topranked);
 app.use('/tagsMovie',tagsmovie);

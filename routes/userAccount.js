@@ -16,7 +16,7 @@ var connection = mysql.createConnection({
 });
 
 function getUserInfo(req, res, next) {
-	var profileQuery = 'select name as likeMovie from movie, user_taste where user_taste.ut_mid = movie.movie_id and user_taste.likes = 1 and user_taste.ut_email ="'+req.params.email+'"';
+	var profileQuery = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.query.email + '"AND likes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(profileQuery, function(err, userLike) {
 		if (err) {
 			throw err;
@@ -27,7 +27,7 @@ function getUserInfo(req, res, next) {
 }
 
 function userDislike(req,res,userLike,next){
-	var profileQuery2 = 'select name as dislikeMovie from movie, user_taste where user_taste.ut_mid = movie.movie_id and user_taste.likes = 0 and user_taste.ut_email ="'+req.params.email+'"';
+	var profileQuery2 = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.query.email + '"AND dislikes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(profileQuery2, function(err, userDislike) {
 		if (err) {
 			throw err;
@@ -38,7 +38,7 @@ function userDislike(req,res,userLike,next){
 }
 
 function userComment(req,res,userLike,userDislike,next){
-	var profileQuery3 = 'select content,movie.name from review,movie where movie.movie_id = review.movie_id and review.email ="'+req.params.email+'"';	
+	var profileQuery3 = 'select content,movie.name from review,movie where movie.movie_id = review.movie_id and review.email ="'+req.query.email+'"';	
 	
 	connection.query(profileQuery3, function(err, userComment) {
 		if (err) {
@@ -50,26 +50,28 @@ function userComment(req,res,userLike,userDislike,next){
 }
 
 function userFriends1(req,res,userLike,userDislike,userComment,next){
-var profileQuery4 = 'select person1 from friends where person2 ="'+req.params.email+'" AND person1 <> "'+req.params.email+'"';	
-	
+var profileQuery4 = 'select person1 from friends where person2 ="'+req.query.email+'" AND person1 <> "'+req.query.email+'"';	
+	console.log(req.query.email);
 	connection.query(profileQuery4, function(err, userFriends1) {
 		if (err) {
 			throw err;
 		} else {
+			console.log(userFriends1);
 			userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next);
 		}
 	});
 }
 
 function userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next){
-	var profileQuery5 = 'select person2 from friends where person1 ="'+req.params.email+'" AND person2 <> "'+req.params.email+'"';	
+	var profileQuery5 = 'select person2 from friends where person1 ="'+req.query.email+'" AND person2 <> "'+req.query.email+'"';	
 		
 		connection.query(profileQuery5, function(err, userFriends2) {
 			if (err) {
 				throw err;
 			} else {
+				console.log(userFriends2);
 				res.render('userAccount.ejs', {
-					email : req.params.email,
+					email : req.query.email,
 					userLike : userLike,
 					userDislike: userDislike,
 					userComment: userComment,
@@ -80,65 +82,6 @@ function userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next
 		});
 	}
 
-function redirectUserAccountPage(req, res, email2, msg) {
-	req.session.msg = msg;
-	res.writeHead(302, {
-		'Location' : '/users/' + email2
-	});
-	res.end();
-}
-
-function addFriendQuery(req, res, next) {
-	if (req.user == null) {
-		res.redirect('/');
-	} else {
-		console.log("what??????");
-		var email1 = req.user.email;
-		var email2 = req.query.addFriend;
-		var addFriendQuery = 'INSERT INTO friends (person1,person2) VALUES ("'
-			+ email1
-			+ '","'
-			+ email2 + '")';
-		console.log("77"+addFriendQuery);
-		connection.query(addFriendQuery, function(err, addFriend) {
-			if (!err) {
-				redirectUserAccountPage(req, res, email2, "have already added this new friend!");
-			} else {
-				next(new Error(500));
-			}
-		});
-	}
-}
-
-function friendQuery(req, res, next) {
-	if (req.user == null) {
-		res.redirect('/');
-	} else {
-		var email1 = req.user.email;
-		var email2 = req.query.addFriend;
-		var checkQuery = 'SELECT count(*) as num FROM friends WHERE person1 = "'
-			+ email1 + '" AND person2 = "' + email2 + '" OR person1 = "'
-			+ email2 + '" AND person2 = "' + email1 +'"';
-		connection.query(checkQuery, function(err, count) {
-			if (!err) {
-				console.log(count);
-				console.log(count.num);
-				console.log(email1);
-				console.log(email2);
-				if (count[0].num == 0) {
-					console.log("cry");
-					addFriendQuery(req, res, next);
-				} else {
-					console.log("hateu");
-					redirectUserAccountPage(req, res, email2, "you've already been friends!");
-				}
-			} else {
-				next(new Error(500));
-			}
-		});
-
-	}
-}
 
 
 
@@ -148,20 +91,15 @@ function friendQuery(req, res, next) {
 
 
 
-router.get('/:email', function (req, res, next) {
-	console.log("aaaaaa");
-    if (req.params.email === undefined) {
-        console.log("email undefined");
-        next(new Error(404));
-    }
-    else {
+
+
+
+
+router.get('/', function (req, res, next) {
+
     	getUserInfo(req, res, next);
-    }
-});
+    });
 
-router.get('/addFriend', function(req, res, next) {
-	console.log("999999999");
-	friendQuery(req, res, next);
-});
+
 
 module.exports = router;

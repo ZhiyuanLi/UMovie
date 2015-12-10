@@ -3,8 +3,8 @@
    <head>
       <title>UMovie</title>
       <meta charset="utf-8">
-      <title>CAJA</title>
       <!-- CSS -->
+      <link rel="stylesheet" href="stylesheets/gh-buttons.css" type="text/css" media="screen" />
       <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" />
       <link rel="stylesheet" href="stylesheets/social-icons.css" type="text/css" media="screen" />
       <link rel="stylesheet" href="" type="text/css" media="screen" id="css-skins" />
@@ -79,7 +79,6 @@
             </toptext>
             <% } %>
             <!-- ENDS Social -->
-
             <!-- headline -->
             <div id="headline" align="center">
                UMovie
@@ -97,11 +96,13 @@
          <div id="top-torn"></div>
       </div>
       <!-- ENDS HEADER -->
-      <!-- MAIN -->
+
+
+
       <div id="main">
          <!-- wrapper-main -->
          <div class="wrapper">
-            <!-- Posts -->
+
             <div>
                <br>
                <ul class="blocks-thumbs">
@@ -112,130 +113,166 @@
                      </div>
                      <!-- ENDS filmbar -->
                   </div>
-                  
                </ul>
             </div>
-
-
+         
+         
+            <!-- Content -->     
             <div class="content-col">
-				
-					<!-- content -->
-					<div class="content">
-						<div class="padding">
-							<% if (userLike.length < 1) { %>
-							<% } else { %>
-							<h3 class="p-title">Movie I liked</h3>
-							<ul class="blocks-thumbs">
-								<% for (var i =0; i <userLike.length; i++){ %>
-                        <li>
+            
+               <!-- content -->
+               <div class="content">
+                  <div class="padding">
+                     <!-- userlike -->
+                     <% if (userLike.length < 1) { %>
+                     <% } else { %>
+                     <h3 class="p-title">Movie I liked</h3>
+                     <ul class="blocks-thumbs">
+                        <% for (var i =0; i <userLike.length; i++){ %>
+                        <li4>
                            <div class="excerpt">
                               <a href= "/movies?movie_id=<%= userLike[i].movie_id %>" class="header"><%= userLike[i].name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style = "color:#e09015"><strong><%= userLike[i].rating %></strong></span></a>
                            </div>
-                        </li>
+                        </li4>
                         <% } %>
                      </ul>
                      <% } %>
                      <br>
+                     <!-- ENDS userlike -->
 
+                     <!-- userdislike -->
                      <% if (userDislike.length < 1) { %>
                      <% } else { %>
                      <h3 class="p-title">Movie I disliked</h3>
                      <ul class="blocks-thumbs">
                         <% for (var i =0; i <userDislike.length; i++){ %>
-                        <li>
-                           <a href="/movies?movie_id=<%= userDislike[i].movie_id %>" class="thumb" title="An image"><img src="<%= userDislike[i].poster %>" alt="Post" width = "300" height = "450" /></a>
+                        <li4>
                            <div class="excerpt">
                               <a href= "/movies?movie_id=<%= userDislike[i].movie_id %>" class="header"><%= userDislike[i].name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style = "color:#e09015"><strong><%= userDislike[i].rating %></strong></span></a>
-                              <div class="meta"><%= userDislike[i].date %></div>
                            </div>
-                        </li>
+                        </li4>
                         <% } %>
                      </ul>
                      <% } %>
                      <br>
+                     <!-- ENDS userdislike -->
 
-                     <% if (userComment.length < 1) { %>
-                     <% } else { %>
-                     <div class="review">
-                        <div class="padding">
-                           <h3 class="p-title">My Review</h3>
-                           <% for (var i =0; i <userComment.length; i++){ %>
-                           <br>
-                           <h6 clas="s-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= userComment[i].name%></h6>
-                           <div id="reviewbar">
-                              <div id = "reivewbar-text"><%=userComment[i].content%></div>
-                           </div>
-                        </div>
-                     </div>                 
-                     <% } %>
-                     <% } %>
-
+                     <!-- recomendation -->
                      <% if (likeRecommendation.length < 1) { %>
+                     <h3 class="p-title">Recommendation for you</h3>
                      <% } else { %>
-                     <h3 class="p-title">Based on the movie you liked : <%=likeRecommendation[0].name%></h3>
+                     <h3 class="p-title">Recommendation based on movie you liked : <%=likeRecommendation[0].name%></h3>
+                     <% } %>
                      <ul class="blocks-thumbs">
                         <% for (var i =0; i <likeMovie.length; i++){ %>
                         <% if (likeMovie[i].movie_id != null){ %>
-                        <li>
-                           <a href="/movies?movie_id=<%= likeMovie[i].movie_id %>" class="thumb" title="An image"><img src="<%= likeMovie[i].poster %>" alt="Post" width = "300" height = "450" /></a>
+                        <li5>
+                           <a href="/movies?movie_id=<%= likeMovie[i].movie_id %>" class="thumb" title="An image"><img src="<%= likeMovie[i].poster %>" alt="Post" width = "200" height = "300" /></a>
                            <div class="excerpt">
                               <a href= "/movies?movie_id=<%= likeMovie[i].movie_id %>" class="header"><%= likeMovie[i].name %>&nbsp;&nbsp;&nbsp;&nbsp;<span style = "color:#e09015"><strong><%= likeMovie[i].rating %></strong></span></a>
                               <div class="meta"><%= likeMovie[i].date %></div>
                            </div>
-                        </li>
+                        </li5>
                         <% } %>
                         <% } %>
                      </ul>
-                     <% } %>
+                     
                      <br>
+                     <!-- ENDS recommendation -->
+
+                     <!-- review -->
+                     <% if (userComment.length < 1) { %>
+                     <% } else { %>
+                     <h3 class="p-title">My Review</h3>
+                     <% for (var i = 0; i <userComment.length; i++){ %>
+                     <h6 clas="s-title"><%= userComment[i].name%></h6>
+                     <p><%=userComment[i].content%></p>
+                     <% } %>
+                     <% } %>
+                     <!-- ENDS review -->
+                     
                   </div>
                </div>
-            </div>
+               <!-- ENDS content -->
+               
 
+                                       
+                                       
+               
+            </div>
+            <!-- ENDS Content -->
+            
+            <!-- Sidebar -->     
             <div class="sidebar">
-               <!-- Info -->
+                              
+                                
+               
+               <!-- Friends -->
+               <br>
+               <br>
                <% if (userFriends1.length < 1 && userFriends2.length < 1) { %>
+               <h6 class="side-title"><span>Whoops</span></h6>
+               <p>You don't have any friend now!</p>
                <% } else { %>
                <h6 class="side-title"><span>Friends</span></h6>
                <% for (var i =0; i <userFriends1.length; i++){ %>
                <table>
+                   <form action= "/deleteFriend" method="get" >
                   <tr>
-                     <td class="col-sm-4"><strong><%= userFriends1[i].person1%><strong></td>
                      <td>
-                        <form action= "/deleteFriend" method="get" >
-                           <button type="submit"  name = "deleteFriend" value = <%= userFriends1[i].person1%>  style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Delete Friend</button>
-                        </form>
+                     <a href ="/userAccount?email=<%=userFriends1[i].person1 %>" style="font-family: 'Yanone Kaffeesatz', arial, serif; font-size: 15px;"><strong ><%= userFriends1[i].person1%><strong></a>
+                     </td>
+                     <td> 
+                           <button type="submit"  name = "deleteFriend" value = <%= userFriends1[i].person1%>  class="button danger icon remove" style="float: right">Delete Friend</button>
+                       
                      </td>
                   </tr>
-               </table> 
+                   </form>
+               
                <% } %>
+
                <% for (var i =0; i <userFriends2.length; i++){ %>
+               <form action= "/deleteFriend" method="get" >
                <tr>
-                  <td class="col-sm-4"><strong><%= userFriends2[i].person2%><strong></td>
                   <td>
-                     <form action= "/deleteFriend" method="get" >
-                        <button type="submit"  name = "deleteFriend" value = <%= userFriends2[i].person2%>  style= "-moz-border-radius: 10px;-webkit-border-radius: 10px; border-radius: 10px; background: #ffd8eb ;color:white;padding:5px;font-size:18px;border:none;padding:8px;">Delete Friend</button>
-                     </form>
+                  <a href ="/userAccount?email=<%=userFriends2[i].person2 %>" style="font-family: 'Yanone Kaffeesatz', arial, serif; font-size: 15px;"><strong><%= userFriends2[i].person2%><strong></a>
                   </td>
-               </tr>  
+                  <td>
+                        <button type="submit"  name = "deleteFriend" value = <%= userFriends2[i].person2%>  class="button danger icon remove" style="float: right" >Delete Friend</button>
+                     
+                  </td>
+               </tr>
+               </form>
                <% } %>
-               <% } %>
+               
+               </table>  
+               <% } %>    
+               <!-- ENDS Friends -->
 
-               <!-- ENDS Info -->
-
-               <!-- Carbon ad -->
-               <div class="ad-holder">
-                  <div class="carbonad">
-                     <span class="carbonad-image"><a href="#"><img src="img/dummies/carbon-ad.gif" alt="ad"></a></span>
-                     <span class="carbonad-text">Pellentesque habitant morbi tristique </span>
-                  </div>
-               </div>
-               <!-- ENDS Carbon ad -->
+            
+               
+               
+               
+               
+        
+        
+               
             </div>
-         </div>
-         <!-- ENDS posts -->
+            <!-- ENDS Sidebar -->
+         
          <div class="clear"></div>
+         </div>
+         <!-- ENDS wrapper-main -->
       </div>
+
+
+
+
+
+
+
+
+      
       <!-- ENDS Main -->
       <!-- FOOTER -->
       <div id="footer">

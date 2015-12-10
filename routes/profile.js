@@ -14,8 +14,6 @@ function getRandomInt(length) {
 	return Math.floor(Math.random() * length);
 }
 
-
-
 function userFriends2(req, res, likesInfo, recommendationInfo, likesMovieInfo, dislikeInfo, commentInfo, userFriends1, next) {
 	var friendQuery2 = 'SELECT person2 FROM friends WHERE person1 ="' + req.user.email + '" AND person2 <> "' + req.user.email + '"';
 	connection.query(friendQuery2, function (err, userFriends2) {
@@ -74,7 +72,7 @@ function doUserDislike(req, res, likesInfo, recommendationInfo, likesMovieInfo, 
 
 function doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInfo, next) {
 	if (likesGenreInfo.length < 1) {
-		var highRatingQuery = 'SELECT * FROM movie ORDER BY rating DESC LIMIT 5';
+		var highRatingQuery = 'SELECT * FROM movie ORDER BY rating DESC LIMIT 9';
 		connection.query(highRatingQuery, function (err, likesMovieInfo) {
 			if (!err) {
 				doUserDislike(req, res, likesInfo, recommendationInfo, likesMovieInfo, next)
@@ -92,10 +90,10 @@ function doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInf
 			genre = likesGenreInfo[index].mg_genre;
 		}
 		console.log(genre);
-		var likeMovieQuery = 'SELECT * FROM movie INNER JOIN (SELECT temp1.movie_id FROM (SELECT m.movie_id AS movie_id FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id WHERE mg.mg_genre = "'+ genre + '") temp1 LEFT JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "'+ req.user.email + '"AND likes = 1) temp2 ON temp1.movie_id = temp2.movie_id WHERE temp2.movie_id IS NULL) temp3 ON temp3.movie_id = movie.movie_id ORDER BY rating DESC LIMIT 5'; 
+		var likeMovieQuery = 'SELECT * FROM movie INNER JOIN (SELECT temp1.movie_id FROM (SELECT m.movie_id AS movie_id FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id WHERE mg.mg_genre = "'+ genre + '") temp1 LEFT JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "'+ req.user.email + '"AND likes = 1) temp2 ON temp1.movie_id = temp2.movie_id WHERE temp2.movie_id IS NULL) temp3 ON temp3.movie_id = movie.movie_id ORDER BY rating DESC LIMIT 9'; 
 		connection.query(likeMovieQuery, function (err, likesMovieInfo) {
 			if (!err) {
-				console.log("111",likesMovieInfo);
+				console.log("4likesMovieInfo",likesMovieInfo);
 				doUserDislike(req, res, likesInfo, recommendationInfo, likesMovieInfo, next)
 			} else {
 				next(new Error(500));
@@ -106,7 +104,7 @@ function doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInf
 
 function doLikeGenreQuery(req, res, likesInfo, next) {
 	var recommendationInfo = [];
-	if (likesInfo.length <1) {
+	if (likesInfo.length < 1) {
 		var likesGenreInfo = [];
 		doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInfo, next);
 	} else {
@@ -114,19 +112,20 @@ function doLikeGenreQuery(req, res, likesInfo, next) {
 		var length = likesInfo.length;
 		var recommendationInfo = [];
 		if (length == 1) {
-			movie_id = likesInfo[0].ut_mid;
+			movie_id = likesInfo[0].movie_id;
 			recommendationInfo[0] = likesInfo[0];
 		} else {
 			var index = getRandomInt(length);
-			movie_id = likesInfo[index].ut_mid
+			movie_id = likesInfo[index].movie_id
 			recommendationInfo[0] = likesInfo[index];
+			console.log("111",movie_id);
 		}
 		var likeGenreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "'
 				+ movie_id + '"';
 		connection.query(likeGenreQuery, function (err, likesGenreInfo) {
 			if (!err) {
-				console.log(recommendationInfo);
-				console.log(likesGenreInfo);
+				console.log("3recommendationInfo",recommendationInfo);
+				console.log("2likesGenreInfo",likesGenreInfo);
 				doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInfo, next);
 			} else {
 				next(new Error(500));
@@ -139,7 +138,7 @@ function doUserLikeQuery(req, res, next) {
 	var likeQuery = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.user.email + '"AND likes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(likeQuery, function(err, likesInfo) {
 		if (!err) {
-			console.log(likesInfo);
+			console.log("1likesInfo",likesInfo);
 			doLikeGenreQuery(req, res, likesInfo, next);
 		} else {
 			next(new Error(500));

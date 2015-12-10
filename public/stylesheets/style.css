@@ -200,7 +200,7 @@ h6.s-title span{
 
 .content-col{ 
 	float: left; 
-	width: 720px;
+	width: 625px;
 	margin-left: 10px;
 	margin-bottom: 30px;
 }
@@ -839,6 +839,49 @@ h6.s-title span{
 
 	
 	line-height: 1em;
+}
+.blocks-thumbs li4{
+	display: block;
+	overflow: hidden;
+	float: left;
+	width: 195px;
+	height: 40px;
+	margin: 0px 0px 0px 5px;
+
+	
+	line-height: 1em;
+}
+
+.blocks-thumbs li4 .excerpt{
+	line-height: 1.5em;
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 18px;
+	margin: 0px 0px 0px 0px;
+	width: 195px;
+	height : 40px
+	
+}
+
+.blocks-thumbs li5{
+	display: block;
+	overflow: hidden;
+	float: left;
+	width: 195px;
+	height: 380px;
+	margin: 0px 0px 0px 5px;
+
+	
+	line-height: 1em;
+}
+
+.blocks-thumbs li5 .excerpt{
+	line-height: 1.5em;
+	font-family: 'Yanone Kaffeesatz', arial, serif;
+	font-size: 18px;
+	margin: 0px 0px 0px 0px;
+	width: 195px;
+	height : 80px
+	
 }
 
 .blocks-thumbs li:hover{

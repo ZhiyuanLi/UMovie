@@ -133,7 +133,7 @@ function userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next
 function redirectUserAccountPage(req, res, email2, msg) {
 	req.session.msg = msg;
 	res.writeHead(302, {
-		'Location' : '/users/' + email2
+		'Location' : '/userAccount?email=' + email2
 	});
 	res.end();
 }
@@ -264,16 +264,16 @@ router.get('/bing/:name/:id', function (req, res, next) {
 });
 
 
-router.get('/users/:email', function (req, res, next) {
-//	console.log("aaaaaa");
-    if (req.params.email === undefined) {
-        console.log("email undefined");
-        next(new Error(404));
-    }
-    else {
-    	getUserInfo(req, res, next);
-    }
-});
+// router.get('/users/:email', function (req, res, next) {
+// //	console.log("aaaaaa");
+//     if (req.params.email === undefined) {
+//         console.log("email undefined");
+//         next(new Error(404));
+//     }
+//     else {
+//     	getUserInfo(req, res, next);
+//     }
+// });
 
 router.get('/addFriend', function(req, res, next) {
 	friendQuery(req, res, next);
