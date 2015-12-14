@@ -10,11 +10,11 @@
 
 
 **Building Instructions**
-- [x] unzip UMoive.zip
-- [x] cd Umoive
+- [x] unzip UMovie.zip
+- [x] cd UMovie
 - [x] npm install → install required modules
 - [x] npm start → launch the app listening on port 3000
 - [x] Modules:
   - Controller: /routes
   - Model: RDS MySQL database & Mongolab database
-  - View: /views (embedded javascript)
+  - View: /views (embedded javascript and css)
