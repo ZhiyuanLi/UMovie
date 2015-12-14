@@ -15,6 +15,7 @@ var connection = mysql.createConnection({
 	database : 'U_Moive'
 });
 
+//get user like movie
 function getUserInfo(req, res, next) {
 	var profileQuery = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.query.email + '"AND likes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(profileQuery, function(err, userLike) {
@@ -26,6 +27,7 @@ function getUserInfo(req, res, next) {
 	});
 }
 
+// get user dislike movie
 function userDislike(req,res,userLike,next){
 	var profileQuery2 = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.query.email + '"AND dislikes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(profileQuery2, function(err, userDislike) {
@@ -37,6 +39,7 @@ function userDislike(req,res,userLike,next){
 	});
 }
 
+//get user review
 function userComment(req,res,userLike,userDislike,next){
 	var profileQuery3 = 'select content,movie.name from review,movie where movie.movie_id = review.movie_id and review.email ="'+req.query.email+'"';	
 	
@@ -49,6 +52,7 @@ function userComment(req,res,userLike,userDislike,next){
 	});
 }
 
+//get friend list
 function userFriends1(req,res,userLike,userDislike,userComment,next){
 var profileQuery4 = 'select person1 from friends where person2 ="'+req.query.email+'" AND person1 <> "'+req.query.email+'"';	
 	console.log(req.query.email);
@@ -62,6 +66,7 @@ var profileQuery4 = 'select person1 from friends where person2 ="'+req.query.ema
 	});
 }
 
+//get friend list
 function userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next){
 	var profileQuery5 = 'select person2 from friends where person1 ="'+req.query.email+'" AND person2 <> "'+req.query.email+'"';	
 		
@@ -81,19 +86,6 @@ function userFriends2(req,res,userLike,userDislike,userComment,userFriends1,next
 			}
 		});
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 router.get('/', function (req, res, next) {
 

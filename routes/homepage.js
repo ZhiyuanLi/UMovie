@@ -32,11 +32,7 @@ function generateResponse(req, res, next) {
 		});
 	} 
 	else if(req.query.bingSearch != null){
-//		var bing_search = req.query.bingSearch.split(' ').join('%20');
-//		console.log(bing_search);
         Bing.web(req.query.bingSearch, function (error, ress, body) {
-//          console.log(body
-//          		);
           res.render('homepage', {
         	  bing_search_results: body.d.results,
         	  search_results : null,
@@ -150,14 +146,12 @@ function addFriendQuery(req, res, next) {
 	if (req.user == null) {
 		res.redirect('/');
 	} else {
-		console.log("what??????");
 		var email1 = req.user.email;
 		var email2 = req.query.addFriend;
 		var addFriendQuery = 'INSERT INTO friends (person1,person2) VALUES ("'
 			+ email1
 			+ '","'
 			+ email2 + '")';
-		console.log("77"+addFriendQuery);
 		connection.query(addFriendQuery, function(err, addFriend) {
 			if (!err) {
 				redirectUserAccountPage(req, res, email2, "have already added this new friend!");
@@ -184,10 +178,8 @@ function friendQuery(req, res, next) {
 				console.log(email1);
 				console.log(email2);
 				if (count[0].num == 0) {
-					console.log("cry");
 					addFriendQuery(req, res, next);
 				} else {
-					console.log("hateu");
 					redirectUserAccountPage(req, res, email2, "you've already been friends!");
 				}
 			} else {
@@ -215,7 +207,6 @@ function deleteFriendQuery(req, res, next){
 		console.log(deleteFriendQuery);
 		connection.query(deleteFriendQuery, function(err, deleteFriend) {
 			if (err) {
-				console.log("ppppp");
 				throw err;
 			} else {
 				redirectProfilePage(req, res, "successfully delete this friend!");
@@ -234,23 +225,17 @@ function deleteFriendQuery(req, res, next){
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-	console.log("nono");
 	generateResponse(req, res, next);
 });
 
 
 router.get('/bing/:name/:id', function (req, res, next) {
-//	console.log("aaaaaa");
     if (req.params.name === undefined) {
         console.log("movie name undefined");
         next(new Error(404));
     }
     else {
-//        console.log("add review");
-//        console.log(req.params.name);
         Bing.web(req.params.name, function (error, ress, body) {
-//            console.log(body
-//            		);
             res.render('bing', {
                 user: req.user,
                 searchResults: body.d.results,
@@ -264,23 +249,11 @@ router.get('/bing/:name/:id', function (req, res, next) {
 });
 
 
-// router.get('/users/:email', function (req, res, next) {
-// //	console.log("aaaaaa");
-//     if (req.params.email === undefined) {
-//         console.log("email undefined");
-//         next(new Error(404));
-//     }
-//     else {
-//     	getUserInfo(req, res, next);
-//     }
-// });
-
 router.get('/addFriend', function(req, res, next) {
 	friendQuery(req, res, next);
 });
 
 router.get('/deleteFriend/', function(req, res, next) {
-	console.log("aaa66666");
 	deleteFriendQuery(req, res, next);
 });
 

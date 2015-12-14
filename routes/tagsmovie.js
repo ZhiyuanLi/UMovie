@@ -30,6 +30,7 @@ function doSearchQuery (req, res, nest) {
 	});
 }
 
+//call bing search api
 function doBingSearch(req, res, next){
 	Bing.web(req.query.bingSearch, function (error, ress, body) { 
 		res.render('tagsMovie', {

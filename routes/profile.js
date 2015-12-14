@@ -93,7 +93,6 @@ function doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInf
 		var likeMovieQuery = 'SELECT * FROM movie INNER JOIN (SELECT temp1.movie_id FROM (SELECT m.movie_id AS movie_id FROM movie_genre mg INNER JOIN movie m ON mg.mg_mid = m.movie_id WHERE mg.mg_genre = "'+ genre + '") temp1 LEFT JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "'+ req.user.email + '"AND likes = 1) temp2 ON temp1.movie_id = temp2.movie_id WHERE temp2.movie_id IS NULL) temp3 ON temp3.movie_id = movie.movie_id ORDER BY rating DESC LIMIT 9'; 
 		connection.query(likeMovieQuery, function (err, likesMovieInfo) {
 			if (!err) {
-				console.log("4likesMovieInfo",likesMovieInfo);
 				doUserDislike(req, res, likesInfo, recommendationInfo, likesMovieInfo, next)
 			} else {
 				next(new Error(500));
@@ -118,14 +117,11 @@ function doLikeGenreQuery(req, res, likesInfo, next) {
 			var index = getRandomInt(length);
 			movie_id = likesInfo[index].movie_id
 			recommendationInfo[0] = likesInfo[index];
-			console.log("111",movie_id);
 		}
 		var likeGenreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "'
 				+ movie_id + '"';
 		connection.query(likeGenreQuery, function (err, likesGenreInfo) {
 			if (!err) {
-				console.log("3recommendationInfo",recommendationInfo);
-				console.log("2likesGenreInfo",likesGenreInfo);
 				doLikeMovieQuery(req, res, likesInfo, recommendationInfo, likesGenreInfo, next);
 			} else {
 				next(new Error(500));
@@ -138,7 +134,6 @@ function doUserLikeQuery(req, res, next) {
 	var likeQuery = 'SELECT * FROM movie m INNER JOIN (SELECT ut_mid AS movie_id FROM user_taste WHERE ut_email = "' + req.user.email + '"AND likes = 1) temp ON temp.movie_id = m.movie_id';
 	connection.query(likeQuery, function(err, likesInfo) {
 		if (!err) {
-			console.log("1likesInfo",likesInfo);
 			doLikeGenreQuery(req, res, likesInfo, next);
 		} else {
 			next(new Error(500));
@@ -152,10 +147,6 @@ function isLoggedIn(req, res, next) {
 
 	res.redirect('/');
 }
-
-
-
-
 
 
 // PROFILE SECTION =========================

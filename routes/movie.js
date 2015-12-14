@@ -17,6 +17,7 @@ var connection = mysql.createConnection({
 
 var movie_id;
 
+//get studios from mongodb
 function getStudios(StudioIds, db, callback) {
 	var studioIdArray = [];
 	StudioIds.forEach(function(result){studioIdArray.push(result.studio_id)});
@@ -28,7 +29,6 @@ function getStudios(StudioIds, db, callback) {
 	var studios = [];
 	cursor.each(function(err, doc) {
 		if (doc != null) {
-			// console.log(doc);
 			studios.push(doc.name);
 		} else {
 			callback(studios);
@@ -83,6 +83,7 @@ function doStudioIdQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo,
 	});
 }
 
+//get movie genre
 function doGenreQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, next) {
 	var genreQuery = 'SELECT mg_genre FROM movie_genre WHERE mg_mid = "' + req.query.movie_id + '"';
 	connection.query(genreQuery, function(err, genreInfo){
@@ -94,6 +95,7 @@ function doGenreQuery(req, res, movieInfo, personInfo, tasteInfo, reviewInfo, ne
 	});
 }
 
+//get all the review for a specific movie
 function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
 	var reviewQuery = 'SELECT * FROM review WHERE movie_id = "' + req.query.movie_id + '"';
 	connection.query(reviewQuery, function(err, reviewInfo) {
@@ -105,6 +107,7 @@ function doReviewQuery(req, res, movieInfo, personInfo, tasteInfo, next) {
 	});
 }
 
+//get all user's like and dislike for the movie
 function doTasteQuery(req, res, movieInfo, personInfo, next) {
 	var tasteQuery = 'SELECT sum(likes) as movie_likes, sum(dislikes) as movie_dislikes FROM user_taste WHERE ut_mid = "'
 		+ req.query.movie_id + '"';
@@ -117,6 +120,7 @@ function doTasteQuery(req, res, movieInfo, personInfo, next) {
 	});
 }
 
+//get crew info
 function doPersonQuery(req, res, movieInfo, next) {
 	var personQuery = 'SELECT p.name as pname, i.i_job as job FROM movie m INNER JOIN involve_in i ON m.movie_id = i.i_mid '
 		+ 'INNER JOIN person p ON p.personId = i.i_pid WHERE m.movie_id = "'
@@ -130,7 +134,7 @@ function doPersonQuery(req, res, movieInfo, next) {
 	});
 }
 
-
+//get all movie info
 function doMovieQuery(req, res, next) {
 	movie_id = req.query.movie_id;
 	var movieQuery = 'SELECT * FROM movie WHERE movie_id = "'
@@ -144,6 +148,7 @@ function doMovieQuery(req, res, next) {
 	});
 }
 
+//search local database based on movie name and crew name 
 function doSearchQuery(req, res, next) {
 	var searchMovie = 'SELECT distinct m.movie_id, m.name as mname, rating, date, abstraction, poster FROM movie m inner join involve_in i on m.movie_id = i. i_mid inner join person p on p.personId = i.i_pid WHERE UPPER(m.name) LIKE UPPER('+'"%'+ req.query.search + '%")' + 'OR UPPER(p.name) LIKE UPPER('+'"%'+ req.query.search + '%") limit 99';
 	connection.query(searchMovie, function(err, searchInfo) {
@@ -164,8 +169,8 @@ function doSearchQuery(req, res, next) {
 	});
 }
 
+//do bing search
 function doBingSearch(req, res, next){
-	console.log("99999");
 	Bing.web(req.query.bingSearch, function (error, ress, body) { 
 		res.render('movie', {
 			user : req.user,
@@ -196,6 +201,7 @@ function generateResponse(req, res, next) {
 	}
 }
 
+//get user rating for the review
 function ratingQuery(req, res, next) {
 	if (req.user == null) {
 		res.redirect('/log_in');
