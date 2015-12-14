@@ -4,7 +4,6 @@ var router = express.Router();
 
 //added bing
 var Bing = require('node-bing-api')({accKey:"9nJKD6eQWAdjyLr0rPAKzFVZMcx0mnzKDEEfKE6qFsc"});
-var moment = require('moment');
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
